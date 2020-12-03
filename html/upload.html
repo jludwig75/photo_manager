@@ -1,0 +1,21 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <div>
+            <a href="/">Home</a>
+            <h2>Upload a file</h2>
+            <form action="upload" method="post" enctype="multipart/form-data">
+                filename: <input type="file" name="fileToUpload"/><br />
+                <input type="submit" />
+            </form>
+            <h2>Upload multiple files</h2>
+            <form action="upload" method="post" enctype="multipart/form-data">
+                filename: <input type="file" name="filesToUpload" multiple/><br />
+                <input type="submit" />
+            </form>
+            <h2>Download a file</h2>
+            <a href='download'>This one</a>            
+        </div>
+    </body>
+</html>
