@@ -2,7 +2,7 @@ app.component('folder-info', {
     template:
     /*html*/
 `
-<span class ="folder-info-item folder_name">{{ current_folder_name }}</span>
+<span class ="component-title folder-info-item">{{ current_folder_name }}</span>
 <span class ="folder-info-item" v-if="folderInfo != null">
     {{ dateString(folderInfo.create_time) }}
 </span>

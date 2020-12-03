@@ -1,24 +1,3 @@
-ul.image-list li.image-list-item
-{
-    float: left;
-    width: 15em;
-    padding: 1em;
-    text-align: center;
-    font-size: small;
-}  /* stop the float */
-ul.folder-list {
-    padding: 0px;
-}
-li.folder-list-item {
-    cursor: pointer;
-    padding: 0.5em;
-    text-align: left;
-}
-br
-{
-    clear: left;
-}  /* separate the list from subsequent markup */
-
 * {
     box-sizing: border-box;
     overflow-y: hidden;
@@ -84,21 +63,10 @@ div.menu {
     vertical-align: middle;
 }
 
-.selected {
-    display:inline-block;
-    background-color: rgb(0, 153, 255);
-}
-
 div.folder-info-content {
     padding: 15px;
     height: 50px;
     background-color: #F0F0F0;
-}
-
-.folder-info-item {
-    padding-left: 15px;
-    padding-right: 15px;
-    font-size: small;
 }
 
 .component-title {

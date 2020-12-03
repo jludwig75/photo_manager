@@ -6,7 +6,7 @@ app.component('image-list', {
     <ul class="image-list">
         <li class="image-list-item" v-for="image in imageList">
             <a :href="image.link">
-                <img :src="image.thumbNail" height="100">
+                <img :src="image.thumbNail" height="90">
             </a>
             <br/>
             {{ image.date.toLocaleDateString('en-US') + ', ' + image.date.toLocaleTimeString('en-US')}}

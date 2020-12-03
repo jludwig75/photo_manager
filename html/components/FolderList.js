@@ -2,18 +2,21 @@ app.component('folder-list', {
     template:
     /*html*/
 `
-<div class="wrapper">
-    <h3 class="folders_title">Folders</h3>
-    <ul class="folder-list">
-        <li class="folder-list-item" v-for="folder in folderList" v-on:click="onClickFolder(folder.name)">
-            <span :class="{ selected: selectedFolderName == folder.name }">
-                <img width="20" src="/folder.png" v-on:click="onClickFolder(folder.name)">
-                {{ folder.name }}
-            </span>
+    <div class="menu-title">
+        <div class="component-title">
+            Folders
+        </div>
+    </div>
+    <ul>
+        <li v-for="folder in folderList" v-on:click="onClickFolder(folder.name)">
+            <div class="folder-li">
+                <span :class="{ selected: selectedFolderName == folder.name }">
+                    <img width="20" src="/folder.png" v-on:click="onClickFolder(folder.name)">
+                    {{ folder.name }}
+                </span>
+            </div>
         </li>
     </ul>
-    <br/>
-</div>
 `,
     data() {
         return {
