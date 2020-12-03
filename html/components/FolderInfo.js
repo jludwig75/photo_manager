@@ -2,9 +2,15 @@ app.component('folder-info', {
     template:
     /*html*/
 `
-<h3 class="folder_name">{{ current_folder_name }}</h3>
-<span v-if="folderInfo != null">
-    {{ dateString(folderInfo.create_time) }} - {{ folderInfo.image_count }} images - {{ sizeString(folderInfo.size_bytes) }}
+<span class ="folder-info-item folder_name">{{ current_folder_name }}</span>
+<span class ="folder-info-item" v-if="folderInfo != null">
+    {{ dateString(folderInfo.create_time) }}
+</span>
+<span class ="folder-info-item" v-if="folderInfo != null">
+    {{ folderInfo.image_count }} images
+</span>
+<span class ="folder-info-item" v-if="folderInfo != null">
+    {{ sizeString(folderInfo.size_bytes) }}
 </span>
 `,
     props: {

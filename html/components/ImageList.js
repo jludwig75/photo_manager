@@ -2,7 +2,7 @@ app.component('image-list', {
     template:
     /*html*/
 `
-<div class="wrapper">
+<div class="wrapper vertical-element">
     <ul class="image-list">
         <li class="image-list-item" v-for="image in imageList">
             <a :href="image.link">

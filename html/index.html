@@ -7,21 +7,21 @@
     <body>
         <div id="app">
             <div class="banner">
-                <div class="banner-content">
-                    <a href="/upload">Upload New Images</a>
+                <div class="banner-content" onclick="alert('Image upload has not been implemented yet.')">
+                    <span class="banner-text">Photo Manager</span>&nbsp;&nbsp;&nbsp;<button>Upload Images</button>
                 </div>
             </div>
-            <div>
                 <div class="sidenav">
-                    <div class="sidenav-content">
+                    <div class="sidenav-content vertical-element">
                         <folder-list @folder-selected="updateSelectedFolder"></folder-list>
                     </div>
                 </div>
                 <div class="main">
-                    <folder-info :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
+                    <div class="folder-info">
+                        <folder-info :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
+                    </div>
                     <image-list :current_folder_name="current_folder_name" :key="current_folder_name"></image-list>
                 </div>
-            </div>
         </div>
         <script src="/Main.js"></script>
         <script src="/components/FolderList.js"></script>
