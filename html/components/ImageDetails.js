@@ -66,6 +66,9 @@ app.component('image-details', {
         },
         unCamelCase(str) {
             function isUpperCase(c) {
+                if (c == c.toLocaleLowerCase()) {
+                    return false;
+                }
                 return c == c.toUpperCase();
             };
             function lastChar(str) {
@@ -75,11 +78,14 @@ app.component('image-details', {
                 return str.charAt(str.length-1);
             }
             var newString = '';
-            for (let c of str) {
-                if (isUpperCase(c) && !isUpperCase(lastChar(newString))) {
+            lastCharUpperCase = true;
+            for (i = 0; i < str.length; i++) {
+                c = str.charAt(i);
+                if (isUpperCase(c) && !lastCharUpperCase && lastChar(newString) != ' ' && newString.length > 0) {
                     newString = newString.concat(' ');
                 }
-                if (newString.length > 0) {
+                lastCharUpperCase = isUpperCase(c);
+                if (newString.length > 0 && lastChar(newString) == ' ' && i == str.length - 1 && !isUpperCase(str.charAt(i+1))) {
                     c = c.toLocaleLowerCase();
                 }
                 newString = newString.concat(c);
