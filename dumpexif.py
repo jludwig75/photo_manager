@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from PIL import Image
 from PIL.ExifTags import TAGS
 import sys
@@ -9,9 +10,12 @@ def loadImageExifData(imageFileName):
         image = Image.open(imageFileName)
         if not image:
             return None
+        exifData['resolution'] = f'{image.width}x{image.height}'
+        exifData['format'] = image.format_description
+        exifData['format_mimetype'] = image.get_format_mimetype()
         exifdata = image.getexif()
         if not exifdata:
-            return None
+            return exifData
         for tag_id in exifdata:
             # get the tag name, instead of human unreadable tag id
             tag = TAGS.get(tag_id, tag_id)

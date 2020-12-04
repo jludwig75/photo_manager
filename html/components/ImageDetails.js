@@ -31,7 +31,7 @@ app.component('image-details', {
                     continue;
                 }
                 newKey = key.toLocaleLowerCase();
-                if (['name', 'index', 'link', 'thumbnail'].includes(newKey)) {
+                if (['name', 'index', 'link', 'thumbnail', 'format_mimetype'].includes(newKey)) {
                     continue;
                 }
                 value = image[key];
