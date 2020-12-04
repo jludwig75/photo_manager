@@ -28,7 +28,11 @@ app.component('image-list', {
         updateImageData(imageData) {
             var index = imageData['userContext']
             this.imageList[index]['date'] = new Date(1000 * imageData['create_time']);
-        },
+            this.imageList[index]['size_bytes'] = imageData['size_bytes'];
+            if (index == 0) {
+                this.selectImage(this.imageList[index], false);
+            }
+    },
         updateImageList(imageList) {
             var index = 0;
             for (const imageName of imageList) {
@@ -36,9 +40,6 @@ app.component('image-list', {
                         'name': imageName,
                         'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
                         'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'};
-                if (index == 0) {
-                    this.selectImage(image, false);
-                }
                 this.imageList.push(image);
                 axios.
                     get('/folders/' + this.current_folder_name + '/images/' + imageName + '?userContext=' + index).

@@ -58,7 +58,7 @@ app.component('folder-info', {
                 return sizeBytes.toFixed(this.getDisplayPrecision(sizeBytes)) + '  KB';
             }
             sizeBytes /= 1024.0;
-        return sizeBytes.toFixed(this.getDisplayPrecision(sizeBytes)) + ' MB';
+            return sizeBytes.toFixed(this.getDisplayPrecision(sizeBytes)) + ' MB';
         }
     },
     mounted() {
