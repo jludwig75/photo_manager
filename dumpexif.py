@@ -19,6 +19,8 @@ def loadImageExifData(imageFileName):
         for tag_id in exifdata:
             # get the tag name, instead of human unreadable tag id
             tag = TAGS.get(tag_id, tag_id)
+            if tag == 'ExifOffset':
+                continue
             data = exifdata.get(tag_id)
             # decode bytes 
             if isinstance(data, bytes):
