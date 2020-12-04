@@ -4,7 +4,7 @@ app.component('image-list', {
 `
 <div class="wrapper vertical-element">
     <ul class="image-list">
-        <li class="image-list-item" v-for="image in imageList">
+        <li class="image-list-item" v-for="image in imageList" :key="image.index">
             <img :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
             <br/>
             {{ image.date.toLocaleDateString('en-US') + ', ' + image.date.toLocaleTimeString('en-US')}}
@@ -32,7 +32,8 @@ app.component('image-list', {
         updateImageList(imageList) {
             var index = 0;
             for (const imageName of imageList) {
-                image = {'name': imageName,
+                image = {'index': index,
+                        'name': imageName,
                         'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
                         'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'};
                 if (index == 0) {
