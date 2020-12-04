@@ -1,19 +1,32 @@
 ul.image-list li.image-list-item
 {
     float: left;
-    width: 15em;
-    padding: 1em;
+    width: 170px;
+    height: 120px;
+    padding: 10px;
     text-align: center;
+    vertical-align: center;
     font-size: small;
+    margin: 5px;
 }  /* stop the float */
+
+.image-list-item > img {
+    max-width: 150px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+}
+
 ul.folder-list {
     padding: 0px;
 }
+
 li.folder-list-item {
     cursor: pointer;
     padding: 0.5em;
     text-align: left;
 }
+
 br
 {
     clear: left;

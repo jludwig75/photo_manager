@@ -10,7 +10,7 @@ app.component('image-list', {
           :key="image.index"
           :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
         >
-            <img :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
+            <img class="image-list-item" :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
         </li>
     </ul>
     <br/>
