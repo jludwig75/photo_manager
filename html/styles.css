@@ -59,6 +59,10 @@ div.menu-title {
     height: 50px;
 }
 
+ul {
+    list-style: none;
+}
+
 .menu ul {
     list-style-type: none;
     margin: 0;
