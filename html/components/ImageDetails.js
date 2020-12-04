@@ -24,34 +24,72 @@ app.component('image-details', {
         }
     },
     methods: {
+        compareObjects(object1, object2, key) {
+            const obj1 = object1[key].toUpperCase()
+            const obj2 = object2[key].toUpperCase()
+          
+            if (obj1 < obj2) {
+              return -1
+            }
+            if (obj1 > obj2) {
+              return 1
+            }
+            return 0
+        },
         getDetailsList(image) {
             var detailsList = [];
             for (var key in image) {
                 if (!image.hasOwnProperty(key)) {
                     continue;
                 }
-                newKey = key.toLocaleLowerCase();
-                if (['name', 'index', 'link', 'thumbnail', 'format_mimetype'].includes(newKey)) {
+                compareKey = key.toLocaleLowerCase();
+                if (['name', 'index', 'link', 'thumbnail', 'format_mimetype'].includes(compareKey)) {
                     continue;
                 }
                 value = image[key];
                 if (value instanceof Date) {
                     value = value.toLocaleDateString('en-US') + ', ' + value.toLocaleTimeString('en-US')
                 }
-                if (newKey.includes('size') && Number.isFinite(value)) {
+                if (compareKey.includes('size') && Number.isFinite(value)) {
                     value = this.sizeString(value);
                 }
-                newKey = newKey.replace(/_bytes/g, '')
+                newKey = key.replace(/_bytes/g, '')
                 detailsList.push({
                                     'name': this.formatKeyName(newKey),
                                     'value': value
                                 })
             }
+            detailsList.sort((book1, book2) => {
+                return this.compareObjects(book1, book2, 'name')
+            });
             return detailsList;
+        },
+        unCamelCase(str) {
+            function isUpperCase(c) {
+                return c == c.toUpperCase();
+            };
+            function lastChar(str) {
+                if (str.length == 0) {
+                    return '';
+                }
+                return str.charAt(str.length-1);
+            }
+            var newString = '';
+            for (let c of str) {
+                if (isUpperCase(c) && !isUpperCase(lastChar(newString))) {
+                    newString = newString.concat(' ');
+                }
+                if (newString.length > 0) {
+                    c = c.toLocaleLowerCase();
+                }
+                newString = newString.concat(c);
+            }
+            return newString;
         },
         formatKeyName(name) {
             name = name.replace(/_/g, ' ')
-            return name.charAt(0).toUpperCase() + name.slice(1);
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            return this.unCamelCase(name);
         },
         getDisplayPrecision(number) {
             if (number < 10) {
