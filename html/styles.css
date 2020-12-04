@@ -202,7 +202,7 @@ div.image-detail {
 
 div.image-detail-header {
     background-color: #F0F0F0;
-    height: 50px;
+    min-height: 50px;
 }
 
 .footer {
