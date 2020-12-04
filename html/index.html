@@ -33,11 +33,11 @@
                 </div>
                 <div class="folder-info">
                     <div class="folder-info-content">
-                        <folder-info :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
+                        <folder-info v-if="current_folder_name != null" :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
                     </div>
                 </div>
                 <div class="main-content">
-                    <image-list @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name"></image-list>
+                    <image-list v-if="current_folder_name != null" @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name"></image-list>
                 </div>
             </div>
 

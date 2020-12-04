@@ -1,8 +1,20 @@
 import cherrypy
 import cherrypy.lib
+from mimetypesdb import getMimeType
 import json
 from manager import PhotoManager
 import os
+
+
+def _getImageMimeType(imageName):
+    parts = os.path.splitext(imageName)
+    if len(parts) < 2:
+        return ''
+    extension = parts[-1][1:].lower()
+    mimeType = getMimeType(extension)
+    if mimeType is None:
+        return 'image/unknown'
+    return mimeType
 
 
 class Image(object):
@@ -17,11 +29,13 @@ class Image(object):
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     def content(self, folder_name, image_name):
-        return cherrypy.lib.static.serve_file(os.path.abspath(self._getImage(folder_name, image_name).path), "image/jpeg")
+        image = self._getImage(folder_name, image_name)
+        return cherrypy.lib.static.serve_file(os.path.abspath(image.path), _getImageMimeType(image.name))
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     def thumbnail(self, folder_name, image_name):
-        return cherrypy.lib.static.serve_file(os.path.abspath(self._getImage(folder_name, image_name).path), "image/jpeg")
+        image = self._getImage(folder_name, image_name)
+        return cherrypy.lib.static.serve_file(os.path.abspath(image.path), _getImageMimeType(image.name))
     def _getImage(self, folderName, imageName):
         folder = self._photoManager.folder(folderName)
         if folder is None:

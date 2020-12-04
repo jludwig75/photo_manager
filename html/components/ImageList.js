@@ -4,10 +4,13 @@ app.component('image-list', {
 `
 <div class="wrapper vertical-element">
     <ul class="image-list">
-        <li class="image-list-item" v-for="image in imageList" :key="image.index">
+        <li
+          class="image-list-item"
+          v-for="image in imageList"
+          :key="image.index"
+          :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
+        >
             <img :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
-            <br/>
-            {{ image.date.toLocaleDateString('en-US') + ', ' + image.date.toLocaleTimeString('en-US')}}
         </li>
     </ul>
     <br/>
@@ -21,7 +24,8 @@ app.component('image-list', {
     },
     data() {
         return {
-            imageList: []
+            imageList: [],
+            selectedImage: null
         }
     },
     methods: {
@@ -57,6 +61,7 @@ app.component('image-list', {
             }
         },
         selectImage(image, update = true) {
+            this.selectedImage = image;
             this.$emit('image-selected', image)
             if (update) {
                 showDialog();
