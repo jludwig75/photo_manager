@@ -24,6 +24,8 @@ def loadImageExifData(imageFileName):
             if tags:
                 for tag in tags:
                     tagValue = tags[tag]
+                    if 'software' in tag.lower():
+                        i = 9
 
                     if tag.lower() == 'image exifoffset':
                         continue
@@ -34,9 +36,8 @@ def loadImageExifData(imageFileName):
                     if 'padding' in tag.lower():
                         continue
 
-                    parts = tag.split()
-                    if len(parts) > 1 and parts[0].lower() == 'image':
-                        tag = tag[6:]
+                    if tag.lower().startswith('image image'):
+                         tag = tag[6:]
                     exifData[tag] = tagValue.printable
 
         if not exifdata:
@@ -53,7 +54,8 @@ def loadImageExifData(imageFileName):
                     data = data.decode('utf-8')
                 except:
                     continue
-            exifData[tag] = data
+            if not data in exifData.values():
+                exifData[tag] = data
         for tag, value in exifData.items():
             if tag.lower() == 'datetime':
                 dt = datetime.strptime(value, '%Y:%m:%d %H:%M:%S')
