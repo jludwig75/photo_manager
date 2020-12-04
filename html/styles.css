@@ -1,5 +1,4 @@
-ul.image-list li.image-list-item
-{
+li.image-list-item {
     float: left;
     width: 170px;
     height: 120px;
@@ -8,7 +7,7 @@ ul.image-list li.image-list-item
     vertical-align: center;
     font-size: small;
     margin: 5px;
-}  /* stop the float */
+}
 
 .image-list-item > img {
     max-width: 150px;
