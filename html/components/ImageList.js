@@ -29,14 +29,30 @@ app.component('image-list', {
         }
     },
     methods: {
+        addImageDetails(image, details) {
+        // image['file_date'] = new Date(1000 * details['create_time']);
+        // image['size_bytes'] = details['size_bytes'];
+        for (var key in details) {
+                if (['name', 'userContext'].includes(key)) {
+                    continue;
+                }
+                if (key in image) {
+                    continue
+                }
+                value = details[key]
+                if (key.includes('date')) {
+                    value = new Date(1000 * value);
+                }
+                image[key] = value
+            }
+        },
         updateImageData(imageData) {
             var index = imageData['userContext']
-            this.imageList[index]['date'] = new Date(1000 * imageData['create_time']);
-            this.imageList[index]['size_bytes'] = imageData['size_bytes'];
+            this.addImageDetails(this.imageList[index], imageData)
             if (index == 0) {
                 this.selectImage(this.imageList[index], false);
             }
-    },
+        },
         updateImageList(imageList) {
             var index = 0;
             for (const imageName of imageList) {

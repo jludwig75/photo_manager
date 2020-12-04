@@ -7,35 +7,15 @@ app.component('image-details', {
         Properties of {{ current_image.name }}:
     </span>
 </div>
-<div class="image-detail">
-<div class="image-detail-name">
-    Date Taken:
-</div>
-<div class="image-detail-value">
-    <span v-if="current_image != null">
-        12/23/2019 at 3:15 pm
-    </span>
-</div>
-</div>
-<div class="image-detail">
-<div class="image-detail-name">
-    File Date:
-</div>
-<div class="image-detail-value">
-    <span v-if="current_image != null">
-        {{ current_image.date.toLocaleDateString('en-US') + ', ' + current_image.date.toLocaleTimeString('en-US')}}
-    </span>
-</div>
-</div>
-<div class="image-detail">
-<div class="image-detail-name">
-    Size:
-</div>
-<div class="image-detail-value">
-    <span v-if="current_image != null">
-        {{ sizeString(current_image.size_bytes) }}
-    </span>
-</div>
+<div class="image-detail" v-for="detail in getDetailsList(current_image)">
+    <div class="image-detail-name">
+        {{ detail.name }}
+    </div>
+    <div class="image-detail-value">
+        <span v-if="current_image != null">
+            {{ detail.value }}
+        </span>
+    </div>
 </div>
 `,
     props: {
@@ -44,6 +24,35 @@ app.component('image-details', {
         }
     },
     methods: {
+        getDetailsList(image) {
+            var detailsList = [];
+            for (var key in image) {
+                if (!image.hasOwnProperty(key)) {
+                    continue;
+                }
+                key = key.toLocaleLowerCase();
+                if (['name', 'index', 'link', 'thumbnail'].includes(key)) {
+                    continue;
+                }
+                value = image[key];
+                if (value instanceof Date) {
+                    value = value.toLocaleDateString('en-US') + ', ' + value.toLocaleTimeString('en-US')
+                }
+                if (key.includes('size') && Number.isFinite(value)) {
+                    value = this.sizeString(value);
+                }
+                key = key.replace(/_bytes/g, '')
+                detailsList.push({
+                                    'name': this.formatKeyName(key),
+                                    'value': value
+                                })
+            }
+            return detailsList;
+        },
+        formatKeyName(name) {
+            name = name.replace(/_/g, ' ')
+            return name.charAt(0).toUpperCase() + name.slice(1);
+        },
         getDisplayPrecision(number) {
             if (number < 10) {
                 return 2;

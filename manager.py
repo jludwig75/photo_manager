@@ -25,7 +25,7 @@ class Image(FileSystemEntity):
         stat = os.stat(self.path)
         return {
                 'name': self.name,
-                'create_time': stat.st_ctime,
+                'file_date': stat.st_ctime,
                 'size_bytes': stat.st_size
                }
     @property
