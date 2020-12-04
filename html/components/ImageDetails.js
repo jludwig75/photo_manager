@@ -30,20 +30,20 @@ app.component('image-details', {
                 if (!image.hasOwnProperty(key)) {
                     continue;
                 }
-                key = key.toLocaleLowerCase();
-                if (['name', 'index', 'link', 'thumbnail'].includes(key)) {
+                newKey = key.toLocaleLowerCase();
+                if (['name', 'index', 'link', 'thumbnail'].includes(newKey)) {
                     continue;
                 }
                 value = image[key];
                 if (value instanceof Date) {
                     value = value.toLocaleDateString('en-US') + ', ' + value.toLocaleTimeString('en-US')
                 }
-                if (key.includes('size') && Number.isFinite(value)) {
+                if (newKey.includes('size') && Number.isFinite(value)) {
                     value = this.sizeString(value);
                 }
-                key = key.replace(/_bytes/g, '')
+                newKey = newKey.replace(/_bytes/g, '')
                 detailsList.push({
-                                    'name': this.formatKeyName(key),
+                                    'name': this.formatKeyName(newKey),
                                     'value': value
                                 })
             }

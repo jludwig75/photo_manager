@@ -40,8 +40,12 @@ app.component('image-list', {
                     continue
                 }
                 value = details[key]
-                if (key.includes('date')) {
-                    value = new Date(1000 * value);
+                if (key.includes('date') && Number.isFinite(value)) {
+                    try {
+                        value = new Date(1000 * value);
+                    } catch {
+                        /* Must not be a time stamp */
+                    }
                 }
                 image[key] = value
             }

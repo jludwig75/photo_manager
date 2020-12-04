@@ -1,3 +1,4 @@
+from dumpexif import loadImageExifData
 import os
 
 class FileSystemEntity:
@@ -23,11 +24,15 @@ class Image(FileSystemEntity):
     @property
     def stats(self):
         stat = os.stat(self.path)
-        return {
+        stats = {
                 'name': self.name,
                 'file_date': stat.st_ctime,
                 'size_bytes': stat.st_size
                }
+        exifData = loadImageExifData(self.path)
+        if exifData is not None:
+            stats.update(exifData)
+        return stats
     @property
     def content(self):
         return open(self.path, 'rb')
