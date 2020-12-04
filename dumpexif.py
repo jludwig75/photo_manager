@@ -17,7 +17,6 @@ def loadImageExifData(imageFileName):
         exifData['resolution'] = f'{image.width}x{image.height}'
         exifData['format'] = image.format_description
         exifData['format_mimetype'] = image.get_format_mimetype()
-        exifdata = image.getexif()
         if os.path.isfile(imageFileName):
             with open(imageFileName, 'rb') as imageFile:
                 tags = exifread.process_file(imageFile)
@@ -39,9 +38,7 @@ def loadImageExifData(imageFileName):
                     if tag.lower().startswith('image image'):
                          tag = tag[6:]
                     exifData[tag] = tagValue.printable
-
-        if not exifdata:
-            return exifData
+        exifdata = image.getexif()
         for tag_id in exifdata:
             # get the tag name, instead of human unreadable tag id
             tag = TAGS.get(tag_id, tag_id)
@@ -54,7 +51,7 @@ def loadImageExifData(imageFileName):
                     data = data.decode('utf-8')
                 except:
                     continue
-            if not data in exifData.values():
+            if not data in exifData.values() and (tag.lower() != 'xpauthor' or 'Image XPAuthor' not in tags.keys()):
                 exifData[tag] = data
         for tag, value in exifData.items():
             if tag.lower() == 'datetime':
