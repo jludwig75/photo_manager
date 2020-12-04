@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+from datetime import datetime
+import exifread
 import os
 from PIL import Image
 from PIL.ExifTags import TAGS
 import sys
-import exifread
+import time
+
 
 def loadImageExifData(imageFileName):
     try:
@@ -51,6 +54,15 @@ def loadImageExifData(imageFileName):
                 except:
                     continue
             exifData[tag] = data
+        for tag, value in exifData.items():
+            if tag.lower() == 'datetime':
+                dt = datetime.strptime(value, '%Y:%m:%d %H:%M:%S')
+                if dt is None:
+                    continue
+                exifData[tag] = time.mktime(dt.timetuple())
+        if 'DateTime' in exifData:
+            exifData['image_date'] = exifData['DateTime']
+            del exifData['DateTime']
         return exifData
     except:
         return None
