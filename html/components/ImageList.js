@@ -5,7 +5,7 @@ app.component('image-list', {
 <div class="wrapper vertical-element">
     <ul class="image-list">
         <li class="image-list-item" v-for="image in imageList">
-            <img :src="image.thumbNail" v-on:click="selectImage(image.name)" height="90">
+            <img :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
             <br/>
             {{ image.date.toLocaleDateString('en-US') + ', ' + image.date.toLocaleTimeString('en-US')}}
         </li>
@@ -31,13 +31,14 @@ app.component('image-list', {
         },
         updateImageList(imageList) {
             var index = 0;
-            if (imageList.length > 0) {
-                this.$emit('image-selected', '/folders/' + this.current_folder_name + '/images/' + imageList[0] + '/content')
-            }
             for (const imageName of imageList) {
-                this.imageList.push({'name': imageName,
-                                    'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
-                                    'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'})
+                image = {'name': imageName,
+                        'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
+                        'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'};
+                if (index == 0) {
+                    this.selectImage(image, false);
+                }
+                this.imageList.push(image);
                 axios.
                     get('/folders/' + this.current_folder_name + '/images/' + imageName + '?userContext=' + index).
                     then(response => this.updateImageData(response.data)).
@@ -53,9 +54,11 @@ app.component('image-list', {
                     catch(error => console.log('Failed to get image list: ' + error));
             }
         },
-        selectImage(imageName) {
-            this.$emit('image-selected', '/folders/' + this.current_folder_name + '/images/' + imageName + '/content')
-            showDialog();
+        selectImage(image, update = true) {
+            this.$emit('image-selected', image)
+            if (update) {
+                showDialog();
+            }
         }
     },
     mounted() {

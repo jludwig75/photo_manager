@@ -2,23 +2,23 @@ const app = Vue.createApp({
     data() {
         return {
             currentFolderName: null,
-            currentImageLink: null
+            currentImage: null
         }
     },
     methods: {
         updateSelectedFolder(selectedFolderName) {
             this.currentFolderName = selectedFolderName;
         },
-        updateSelectedImage(selectedImageName) {
-            this.currentImageLink = selectedImageName;
+        updateSelectedImage(selectedImage) {
+            this.currentImage = selectedImage;
         }
     },
     computed: {
         current_folder_name() {
             return this.currentFolderName;
         },
-        current_image_link() {
-            return this.currentImageLink;
+        current_image() {
+            return this.currentImage;
         }
     }
 })

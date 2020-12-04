@@ -28,7 +28,7 @@
             <div class="col-65 main">
                 <div style="display: none">
                     <div id="dialog" title="View Image" style="width: 80%">
-                        <img class="dialog-img" :src="current_image_link">
+                        <img v-if="current_image != null" class="dialog-img" :src="current_image.link">
                     </div>
                 </div>
                 <div class="folder-info">
