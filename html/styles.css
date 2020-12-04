@@ -136,6 +136,17 @@ div.right {
     border-left: solid darkgray 3px;
 }
 
+.dialog-img {
+    max-width: 1024px;
+    max-height: 768px;
+    width: auto;
+    height: auto;
+}
+
+#dialog {
+    text-align: center;
+}
+
 .aside {
     overflow-y: auto; /* Enabled vertical scroll */
     padding: 0;

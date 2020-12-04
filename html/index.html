@@ -5,6 +5,14 @@
         <link rel="stylesheet" href="/styles.css" />
         <script src="https://unpkg.com/vue@next"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>        
+        <script>
+            function showDialog() {
+                $( "#dialog" ).dialog({width: 1124, height: 868});
+            }
+        </script>
     </head>
     <body>
 
@@ -18,13 +26,18 @@
             </div>
 
             <div class="col-65 main">
+                <div style="display: none">
+                    <div id="dialog" title="View Image" style="width: 80%">
+                        <img class="dialog-img" :src="current_image_link">
+                    </div>
+                </div>
                 <div class="folder-info">
                     <div class="folder-info-content">
                         <folder-info :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
                     </div>
                 </div>
                 <div class="main-content">
-                    <image-list :current_folder_name="current_folder_name" :key="current_folder_name"></image-list>
+                    <image-list @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name"></image-list>
                 </div>
             </div>
 

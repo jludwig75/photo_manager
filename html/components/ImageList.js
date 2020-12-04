@@ -5,9 +5,7 @@ app.component('image-list', {
 <div class="wrapper vertical-element">
     <ul class="image-list">
         <li class="image-list-item" v-for="image in imageList">
-            <a :href="image.link">
-                <img :src="image.thumbNail" height="90">
-            </a>
+            <img :src="image.thumbNail" v-on:click="selectImage(image.name)" height="90">
             <br/>
             {{ image.date.toLocaleDateString('en-US') + ', ' + image.date.toLocaleTimeString('en-US')}}
         </li>
@@ -33,6 +31,9 @@ app.component('image-list', {
         },
         updateImageList(imageList) {
             var index = 0;
+            if (imageList.length > 0) {
+                this.$emit('image-selected', '/folders/' + this.current_folder_name + '/images/' + imageList[0] + '/content')
+            }
             for (const imageName of imageList) {
                 this.imageList.push({'name': imageName,
                                     'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
@@ -51,6 +52,10 @@ app.component('image-list', {
                     then(response => this.updateImageList(response.data)).
                     catch(error => console.log('Failed to get image list: ' + error));
             }
+        },
+        selectImage(imageName) {
+            this.$emit('image-selected', '/folders/' + this.current_folder_name + '/images/' + imageName + '/content')
+            showDialog();
         }
     },
     mounted() {
