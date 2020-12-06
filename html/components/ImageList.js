@@ -83,8 +83,8 @@ app.component('image-list', {
         },
         selectImage(image) {
             this.selectedImage = image;
-            this.$emit('image-selected', image);
             document.getElementById('image-' + image.index).scrollIntoView();
+            this.$emit('image-selected', image);
         },
         onClickImage(image) {
             this.selectImage(image);
@@ -112,6 +112,17 @@ app.component('image-list', {
                 this.advanceImage(false);
             } else if (e.key == 'ArrowRight') {
                 this.advanceImage();
+            } else if (e.key == 'Enter') {
+                var t = this.selectedImage;
+                this.selectedImage = null;
+                this.selectedImage = t;
+                showDialog();
+                // Do this to prevent enter key from closing dialog.
+                // Not only is behavior not intuitive for this app,
+                // but pressing enter on an image shows the dialog,
+                // but the user never sees it because the dialog closes
+                // right away because of this enter key event.
+                e.preventDefault();
             }
         });
     }
