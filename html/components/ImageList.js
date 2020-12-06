@@ -103,6 +103,23 @@ app.component('image-list', {
                     this.selectImage(this.imageList[this.selectedImage.index - 1]);
                 }
             }
+        },
+        imagesPerRow() {
+            if (this.imageList.length < 2) {
+                return this.imageList.length;
+            }
+            var firstElementId = 'image-' + this.imageList[0].index;
+            var firstElementOffset = document.getElementById(firstElementId).offsetTop;
+            itemsPerRow = 0;
+            for (image of this.imageList) {
+                var divId = 'image-' + image.index;
+                if (document.getElementById(divId).offsetTop != firstElementOffset) {
+                    break;
+                }
+                itemsPerRow++;
+            }
+
+            return itemsPerRow;
         }
     },
     mounted() {
@@ -123,6 +140,39 @@ app.component('image-list', {
                 // but the user never sees it because the dialog closes
                 // right away because of this enter key event.
                 e.preventDefault();
+            } else if (e.key == 'ArrowDown') {
+                if (this.selectedImage == null || this.imageList.length == 0) {
+                    return;
+                }
+                if (this.selectedImage.index < this.imageList.length - 1) {
+                    var imagesPerRow = this.imagesPerRow();
+                    var fullRows = Math.floor(this.imageList.length / imagesPerRow);
+                    var firstIndexOnLastRow = fullRows * imagesPerRow;
+                    if (firstIndexOnLastRow == this.imageList.length) {
+                        firstIndexOnLastRow -= imagesPerRow;
+                    }
+                    if (this.selectedImage.index >= firstIndexOnLastRow) {
+                        return;
+                    }
+                    var newIndex = this.selectedImage.index + imagesPerRow;
+                    if (newIndex > this.imageList.length - 1) {
+                        newIndex = this.imageList.length - 1;
+                    }
+                    this.selectImage(this.imageList[newIndex]);
+                }
+            } else if (e.key == 'ArrowUp') {
+                if (this.selectedImage == null || this.imageList.length == 0) {
+                    return;
+                }
+                var imagesPerRow = this.imagesPerRow();
+                if (this.selectedImage.index > 0) {
+                    if (this.selectedImage.index < imagesPerRow) {
+                        return;
+                    } else {
+                        var newIndex = this.selectedImage.index - imagesPerRow;
+                        this.selectImage(this.imageList[newIndex]);
+                    }
+                }
             }
         });
     }
