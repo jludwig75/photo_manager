@@ -9,6 +9,7 @@ app.component('image-list', {
           v-for="image in imageList"
           :key="image.index"
           :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
+          :id="'image-' + image.index"
         >
             <img class="image-list-item" :src="image.thumbNail" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" height="90">
         </li>
@@ -82,7 +83,8 @@ app.component('image-list', {
         },
         selectImage(image) {
             this.selectedImage = image;
-            this.$emit('image-selected', image)
+            this.$emit('image-selected', image);
+            document.getElementById('image-' + image.index).scrollIntoView();
         },
         onClickImage(image) {
             this.selectImage(image);
@@ -90,9 +92,27 @@ app.component('image-list', {
         onDoubleClickImage(image) {
             this.selectImage(image);
             showDialog();
+        },
+        advanceImage(forward = true) {
+            if (forward) {
+                if (this.selectedImage.index < this.imageList.length - 1) {
+                    this.selectImage(this.imageList[this.selectedImage.index + 1]);
+                }
+            } else {
+                if (this.selectedImage.index > 0) {
+                    this.selectImage(this.imageList[this.selectedImage.index - 1]);
+                }
+            }
         }
     },
     mounted() {
-        this.getImages()
+        this.getImages();
+        window.addEventListener('keydown', (e) => {
+            if (e.key == 'ArrowLeft') {
+                this.advanceImage(false);
+            } else if (e.key == 'ArrowRight') {
+                this.advanceImage();
+            }
+        });
     }
 })

@@ -20,5 +20,7 @@ const app = Vue.createApp({
         current_image() {
             return this.currentImage;
         }
+    },
+    mounted() {
     }
 })
