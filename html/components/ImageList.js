@@ -140,7 +140,7 @@ app.component('image-list', {
                 // but the user never sees it because the dialog closes
                 // right away because of this enter key event.
                 e.preventDefault();
-            } else if (e.key == 'ArrowDown') {
+            } else if (e.key == 'ArrowDown') {  // TODO: Disable when dialog is open
                 if (this.selectedImage == null || this.imageList.length == 0) {
                     return;
                 }
@@ -160,7 +160,7 @@ app.component('image-list', {
                     }
                     this.selectImage(this.imageList[newIndex]);
                 }
-            } else if (e.key == 'ArrowUp') {
+            } else if (e.key == 'ArrowUp') {  // TODO: Disable when dialog is open
                 if (this.selectedImage == null || this.imageList.length == 0) {
                     return;
                 }
