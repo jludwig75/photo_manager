@@ -10,7 +10,7 @@ app.component('image-list', {
           :key="image.index"
           :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
         >
-            <img class="image-list-item" :src="image.thumbNail" v-on:click="selectImage(image)" height="90">
+            <img class="image-list-item" :src="image.thumbNail" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" height="90">
         </li>
     </ul>
     <br/>
@@ -54,7 +54,7 @@ app.component('image-list', {
             var index = imageData['userContext']
             this.addImageDetails(this.imageList[index], imageData)
             if (index == 0) {
-                this.selectImage(this.imageList[index], false);
+                this.selectImage(this.imageList[index]);
             }
         },
         updateImageList(imageList) {
@@ -80,12 +80,16 @@ app.component('image-list', {
                     catch(error => console.log('Failed to get image list: ' + error));
             }
         },
-        selectImage(image, update = true) {
+        selectImage(image) {
             this.selectedImage = image;
             this.$emit('image-selected', image)
-            if (update) {
-                showDialog();
-            }
+        },
+        onClickImage(image) {
+            this.selectImage(image);
+        },
+        onDoubleClickImage(image) {
+            this.selectImage(image);
+            showDialog();
         }
     },
     mounted() {
