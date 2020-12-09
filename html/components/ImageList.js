@@ -83,7 +83,10 @@ app.component('image-list', {
         },
         selectImage(image) {
             this.selectedImage = image;
-            document.getElementById('image-' + image.index).scrollIntoView();
+            var imageId = 'image-' + image.index;
+            if (!this.isElementInViewport(imageId)) {
+                document.getElementById(imageId).scrollIntoView(false);
+            }
             this.$emit('image-selected', image);
         },
         onClickImage(image) {
@@ -120,6 +123,23 @@ app.component('image-list', {
             }
 
             return itemsPerRow;
+        },
+        isElementInViewport (elId) {
+            var el = document.getElementById(elId);
+
+            // Special bonus for those using jQuery
+            if (typeof jQuery === "function" && el instanceof jQuery) {
+                el = el[0];
+            }
+
+            var rect = el.getBoundingClientRect();
+
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+            );
         }
     },
     mounted() {

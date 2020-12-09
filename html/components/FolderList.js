@@ -10,10 +10,10 @@ app.component('folder-list', {
     <ul>
         <li v-for="folder in folderList" v-on:click="onClickFolder(folder.name)">
             <div class="folder-li">
-                <span :class="{ selected: selectedFolderName == folder.name }">
+                <div :class="{ selected: selectedFolderName == folder.name }">
                     <img width="20" src="/folder.png" v-on:click="onClickFolder(folder.name)">
                     {{ folder.name }}
-                </span>
+                </div>
             </div>
         </li>
     </ul>

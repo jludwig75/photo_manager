@@ -1,4 +1,5 @@
 from dumpexif import loadImageExifData
+from imgutils import generateThumbNail
 import os
 
 class FileSystemEntity:
@@ -21,6 +22,7 @@ class FileSytemContainer(FileSystemEntity):
 class Image(FileSystemEntity):
     def __init__(self, name, folderPath):
         super().__init__(name, folderPath)
+        self._folderPath = folderPath
     @property
     def stats(self):
         stat = os.stat(self.path)
@@ -33,6 +35,17 @@ class Image(FileSystemEntity):
         if exifData is not None:
             stats.update(exifData)
         return stats
+    @property
+    def thumbnailPath(self):
+        thumbnailDir = os.path.join(self._folderPath, 'thumbnails')
+        if not os.path.exists(thumbnailDir):
+            os.mkdir(thumbnailDir)
+        thumbnailPath = os.path.join(thumbnailDir, self.name)
+        if not os.path.exists(thumbnailPath):
+            generateThumbNail(self.path, thumbnailDir)
+            if not os.path.exists(thumbnailPath):
+                return self.path
+        return thumbnailPath
     @property
     def content(self):
         return open(self.path, 'rb')

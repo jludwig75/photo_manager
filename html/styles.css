@@ -96,12 +96,15 @@ div.menu {
     font-size: small;
 }
 
+/* .folder-li > span {
+    display:inline-block;
+} */
+
 .folder-li > img {
     vertical-align: middle;
 }
 
 .selected {
-    display:inline-block;
     background-color: rgb(0, 153, 255);
 }
 
