@@ -72,7 +72,9 @@ class Folder(FileSytemContainer):
                 }
     @property
     def images(self):
-        return [path for path in os.listdir(self.path) if self._isImageFile(self.fullPath(path))]
+        paths = [path for path in os.listdir(self.path) if self._isImageFile(self.fullPath(path))]
+        paths.sort()
+        return paths
     def image(self, imageName):
         if not self._isImageFile(self.fullPath(imageName)):
             return None
@@ -96,7 +98,7 @@ class PhotoManager(FileSytemContainer):
     @property
     def folders(self):
         folders = [path for path in os.listdir(self.path) if os.path.isdir(self.fullPath(path))]
-        folders.sort(key=lambda x: -Folder(x, self.path).stats['create_time'])
+        folders.sort()#key=lambda x: -Folder(x, self.path).stats['create_time'])
         return folders
     def folder(self, folderName):
         if not os.path.isdir(self.fullPath(folderName)):
