@@ -23,8 +23,6 @@ def loadImageExifData(imageFileName):
             if tags:
                 for tag in tags:
                     tagValue = tags[tag]
-                    if 'software' in tag.lower():
-                        i = 9
 
                     if tag.lower() == 'image exifoffset':
                         continue

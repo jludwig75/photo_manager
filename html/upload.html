@@ -1,21 +1,30 @@
 <html>
     <head>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#submit-one').click(function(evt) {
+                    evt.preventDefault();
+                    for (let file of $('#single-file')[0].files) {
+                        let req = new XMLHttpRequest();
+                        let formData = new FormData();
+                        formData.append('fileToUpload', file);
+                        formData.append('folder', 'New Images');
+                        req.open('POST', '/upload');
+                        req.send(formData);
+                    }
+                })
+            });
+        </script>
     </head>
     <body>
         <div>
             <a href="/">Home</a>
-            <h2>Upload a file</h2>
+            <h2>Upload Files</h2>
             <form action="upload" method="post" enctype="multipart/form-data">
-                filename: <input type="file" name="fileToUpload"/><br />
-                <input type="submit" />
+                filename: <input id="single-file" type="file" name="fileToUpload" multiple/><br />
+                <input id="submit-one" type="submit" />
             </form>
-            <h2>Upload multiple files</h2>
-            <form action="upload" method="post" enctype="multipart/form-data">
-                filename: <input type="file" name="filesToUpload" multiple/><br />
-                <input type="submit" />
-            </form>
-            <h2>Download a file</h2>
-            <a href='download'>This one</a>            
         </div>
     </body>
 </html>
