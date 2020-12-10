@@ -82,7 +82,7 @@ class Folder(FileSytemContainer):
         return Image(imageName, self.path)
     def addImage(self, imageName, writer):
         if os.path.exists(self.fullPath(imageName)):
-            return None
+            return Image(imageName, self.path)
         with open(self.fullPath(imageName), 'wb') as imageFile:
             writer(imageFile)
         return Image(imageName, self.path)

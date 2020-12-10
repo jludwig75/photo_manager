@@ -35,6 +35,7 @@ class Root(object):
         writer = ImageWriter(fileToUpload)
         img = uploadFolder.addImage(fileToUpload.filename, writer.writeImage)
         if img is None:
+            print(f'Failed to add image {fileToUpload.filename}')
             raise cherrypy.HTTPError(status=500, message=f'Upload of image {fileToUpload.filename} to {folder} failed')
 
     @cherrypy.expose

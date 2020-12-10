@@ -66,25 +66,51 @@ app.component('image-upload', {
                 }
             }
         },
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        },
         uploadFiles() {
+            console.log('uploadFiles ' + this.files.length + ':');
             for (var i = 0; i < this.files.length; i++) {
-                this.uploading++;
-                this.files[i].state = 'Uploading...';
-                let req = new XMLHttpRequest();
-                let formData = new FormData();
-                formData.append('fileToUpload', this.files[i].file);
-                formData.append('folder', 'New Images');
-                let index = this.files[i].index;
-                req.upload.addEventListener("load", function () {
-                    this.files[index].state = 'Complete';
-                    this.uploading--;
-                    if (this.uploading == 0)
-                    {
-                        this.files = [];
-                    }
-                }.bind(this));
-                req.open('POST', '/upload');
-                req.send(formData);
+                if (this.uploading >= 4) {
+                    console.log(this.uploading + ' files currently uploading. Setting timeout and returning');
+                    setTimeout(() => { this.uploadFiles(); }, 100);
+                    return;
+                }
+                if (this.files[i].state == 'Ready') {
+                    this.uploading++;
+                    console.log('Uploading file ' + i + ':' + this.files[i].file.name + ' ' + this.uploading + ' files uploading');
+                    this.files[i].state = 'Uploading...';
+                    let req = new XMLHttpRequest();
+                    let formData = new FormData();
+                    formData.append('fileToUpload', this.files[i].file);
+                    formData.append('folder', 'New Images');
+                    let index = i;
+                    req.upload.addEventListener("load", function () {
+                        if (this == null || this.files == null || index >= this.files.length || this.files[index] == null) {
+                            console.error('Unexpected upload state!!');
+                            return;
+                        }
+                        this.files[index].state = 'Complete';
+                        this.uploading--;
+                        console.log('File ' + index + ':' + this.files[index].file.name + ' uploaded ' + this.uploading + ' files uploading');
+                        if (this.uploading == 0)
+                        {
+                            this.files = [];
+                        }
+                    }.bind(this));
+                    req.upload.addEventListener("error", function () {
+                        this.files[index].state = 'Failed';
+                        this.uploading--;
+                        console.log('File ' + index + ':' + this.files[index].file.name + ' uploaded ' + this.uploading + ' files uploading');
+                        if (this.uploading == 0)
+                        {
+                            this.files = [];
+                        }
+                    }.bind(this));
+                    req.open('POST', '/upload');
+                    req.send(formData);
+                }
             }
         }
     }
