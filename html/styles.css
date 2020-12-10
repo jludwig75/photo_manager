@@ -72,12 +72,22 @@ body {
     margin-bottom: 10px;
 }
 
-#form-wrapper > form {
-    padding-bottom: 6px;
+.upload-dialog-header-item {
+    float: left;
+}
+
+.upload-dialog-header-item > button {
+    margin-top: 15px;
+}
+
+.upload-dialog-header-item > form {
+    padding-bottom: 8px;
+    margin-right: 10px;
 }
 
 .label-button {
-    background-color: #FCFCFC;
+    background-color: #F0F0F0;
+    margin: 2px;
 }
 
 #single-file {
@@ -87,8 +97,6 @@ body {
 #single-file-label {
     border: solid black 1px;
     padding: 3px;
-    margin: 2px;
-    font-size: small;
 }
 
 #upload-file-list {
@@ -97,6 +105,8 @@ body {
     height: 400px;
     padding-left: 5px;
     padding-right: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 #upload-file-list > ul {
@@ -107,6 +117,19 @@ body {
 .upload-file-list-item {
     float: left;
     padding: 5px;
+    margin-right: 10px;
+}
+
+.upload-file-list-file-name {
+    width: 450px;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.upload-file-list-state {
+    width: 210px;
+    overflow-x: visible;
+    white-space: nowrap;
 }
 
 div.header > * {
