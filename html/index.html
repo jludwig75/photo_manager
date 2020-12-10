@@ -12,17 +12,26 @@
             function showDialog() {
                 $( "#dialog" ).dialog({width: 1124, height: 868});
             }
+            function showUploadDialog() {
+                $( "#upload-dialog" ).dialog({width: 400, height: 600});
+            }
         </script>
     </head>
     <body>
 
         <div class="header">
-            <h2>Photo Manager</h2>
+            <div class="header-item"><h2>Photo Manager</h2></div>
+            <div class="header-item"><button onclick="showUploadDialog()">Upload Images</button></div>
         </div>
 
         <div id="app" class="row">
             <div id="main-div" class="col-15 menu">
                 <folder-list @folder-selected="updateSelectedFolder"></folder-list>
+            </div>
+            <div style="display: none">
+                <div id="upload-dialog" title="Upload Images" style="width: 80%">
+                    <image-upload></image-upload>
+                </div>
             </div>
 
             <div class="col-65 main">
@@ -57,6 +66,7 @@
         <script src="/components/FolderInfo.js"></script>
         <script src="/components/ImageList.js"></script>
         <script src="/components/ImageDetails.js"></script>
+        <script src="/components/ImageUpload.js"></script>
         <script>
             const mountedApp = app.mount('#app')
         </script>

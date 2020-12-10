@@ -63,6 +63,58 @@ body {
     padding-left: 15px;
     height: 80px;
     border-bottom: solid rgb(77, 77, 77) 3px;
+    vertical-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.upload-dialog-item {
+    margin-bottom: 10px;
+}
+
+#form-wrapper > form {
+    padding-bottom: 6px;
+}
+
+.label-button {
+    background-color: #FCFCFC;
+}
+
+#single-file {
+    display: none;
+}
+
+#single-file-label {
+    border: solid black 1px;
+    padding: 3px;
+    margin: 2px;
+    font-size: small;
+}
+
+#upload-file-list {
+    overflow-y: auto;
+    border: solid darkgray 2px;
+    height: 400px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#upload-file-list > ul {
+    padding: 0;
+    margin: 0;
+}
+
+.upload-file-list-item {
+    float: left;
+    padding: 5px;
+}
+
+div.header > * {
+    float: left;
+}
+
+.header-item > button {
+    margin-left: 2em;
 }
 
 div.menu-title {

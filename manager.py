@@ -1,3 +1,4 @@
+from datetime import datetime
 from dumpexif import loadImageExifData
 from imgutils import generateThumbNail
 import os
@@ -109,3 +110,17 @@ class PhotoManager(FileSytemContainer):
             return None
         os.mkdir(self.fullPath(folderName))
         return Folder(folderName, self.path)
+    def suggestNewFolderName(self):
+        now = datetime.now()
+        dateString = now.strftime('%Y-%m-%d')
+        newFolderName = f'New Folder {dateString}'
+        if not os.path.exists(self.fullPath(newFolderName)):
+            return newFolderName
+        timeString = now.strftime('%H:%M:%S')
+        newFolderName += f' {timeString}'
+        if not os.path.exists(self.fullPath(newFolderName)):
+            return newFolderName
+        i = 0
+        while os.path.exists(self.fullPath(f'{newFolderName} {i}')):
+            i += 1
+        return f'{newFolderName} {i}'

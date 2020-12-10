@@ -50,8 +50,15 @@ class Folder(object):
         self._photoManager = photoManager
 
     @cherrypy.expose
+    @cherrypy.tools.allow(methods=['GET', 'POST'])
     def index(self, folder_name):
-        return json.dumps(self._getFolder(folder_name).stats)
+        if cherrypy.request.method == 'GET':
+            return json.dumps(self._getFolder(folder_name).stats)
+        elif cherrypy.request.method == 'POST':
+            folder = self._photoManager.addFolder(folder_name)
+            if folder is None:
+                raise cherrypy.HTTPError(status=500, message=f'Error creating folder {folder_name}')
+            return 'OK'
 
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
@@ -91,3 +98,8 @@ class FolderManager(object):
     @cherrypy.tools.allow(methods=['GET'])
     def index(self):
         return json.dumps(self._photoManager.folders)
+    
+    @cherrypy.expose
+    @cherrypy.tools.allow(methods=['GET'])
+    def suggest_folder_name(self):
+        return self._photoManager.suggestNewFolderName()

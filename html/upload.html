@@ -2,7 +2,11 @@
     <head>
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script>
+            var newFolderName = null;
             $(document).ready(function () {
+                $.get( "/folders/suggest_folder_name", function(data) {
+                    newFolderName = data;
+                });
                 $('#submit-one').click(function(evt) {
                     evt.preventDefault();
                     for (let file of $('#single-file')[0].files) {
