@@ -35,24 +35,19 @@ class Root(object):
         writer = ImageWriter(fileToUpload)
         img = uploadFolder.addImage(fileToUpload.filename, writer.writeImage)
         if img is None:
-            print(f'Failed to add image {fileToUpload.filename}')
+            print(f'Image {fileToUpload.filename} already exists in {folder}')
             raise cherrypy.HTTPError(status=409, message=f'Image {fileToUpload.filename} is already in {folder}')
 
     @cherrypy.expose
+    @cherrypy.tools.allow(methods=['POST'])
     def upload(self, **kwargs):
-        if cherrypy.request.method == 'GET':
-            return loadHtmlFile('upload.html')
-        elif cherrypy.request.method == 'POST':
-            if not 'fileToUpload' in kwargs:
-                raise cherrypy.HTTPError(status=400, message='Missing argument "fileToUpload"')
-            if not 'folder' in kwargs:
-                raise cherrypy.HTTPError(status=400, message='Missing argument "folder"')
-            fileToUpload = kwargs['fileToUpload']
-            folder = kwargs['folder']
-            self._uploadFile(folder, fileToUpload)
-        else:
-            raise cherrypy.HTTPError(status=405, message='Method %s not supported' % cherrypy.request.method)
-        return 'OK'
+        if not 'fileToUpload' in kwargs:
+            raise cherrypy.HTTPError(status=400, message='Missing argument "fileToUpload"')
+        if not 'folder' in kwargs:
+            raise cherrypy.HTTPError(status=400, message='Missing argument "folder"')
+        fileToUpload = kwargs['fileToUpload']
+        folder = kwargs['folder']
+        self._uploadFile(folder, fileToUpload)
 
 
 if __name__ == "__main__":

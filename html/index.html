@@ -12,25 +12,22 @@
             function showDialog() {
                 $( "#dialog" ).dialog({width: 1124, height: 868});
             }
-            function showUploadDialog() {
-                $( "#upload-dialog" ).dialog({width: 800, height: 600});
-            }
         </script>
     </head>
     <body>
 
-        <div class="header">
-            <div class="header-item"><h2>Photo Manager</h2></div>
-            <div class="header-item"><button onclick="showUploadDialog()">Upload Images</button></div>
-        </div>
-
         <div id="app" class="row">
+            <div class="header">
+                <div class="header-item"><h2>Photo Manager</h2></div>
+                <div class="header-item"><button v-on:click="showUploadDialog">Upload Images</button></div>
+            </div>
+
             <div id="main-div" class="col-15 menu">
-                <folder-list @folder-selected="updateSelectedFolder"></folder-list>
+                <folder-list @folder-selected="updateSelectedFolder" :key="folder_list_updates" :override_folder_selection="override_folder_selection"></folder-list>
             </div>
             <div style="display: none">
                 <div id="upload-dialog" title="Upload Images" style="width: 80%">
-                    <image-upload></image-upload>
+                    <image-upload @upload-complete="onUploadComplete" :upload_dialog_mounts="upload_dialog_mounts" :key="upload_dialog_mounts"></image-upload>
                 </div>
             </div>
 

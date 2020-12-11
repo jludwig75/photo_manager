@@ -39,7 +39,13 @@ app.component('image-upload', {
             files: [],
             fileIndex: 0,
             uploading: 0,
-            filesToUpload: 0
+            filesToUpload: 0,
+            folderName: null
+        }
+    },
+    props: {
+        upload_dialog_mounts: {
+            required: true
         }
     },
     methods: {
@@ -95,7 +101,7 @@ app.component('image-upload', {
                     let req = new XMLHttpRequest();
                     let formData = new FormData();
                     formData.append('fileToUpload', this.files[i].file);
-                    formData.append('folder', 'New Images');
+                    formData.append('folder', this.folderName);
                     let index = i;
                     req.addEventListener("load", function (evt) {
                         this.handleUploadCompletion(index, evt);
@@ -131,6 +137,7 @@ app.component('image-upload', {
             if (this.filesToUpload == 0)
             {
                 this.clearCompletedFiles();
+                this.$emit('upload-complete', this.folderName);
             }
         },
         clearCompletedFiles() {
@@ -154,6 +161,15 @@ app.component('image-upload', {
         },
         clearList() {
             this.files = [];
+        },
+        updateFolderName(folderName) {
+            this.folderName = folderName;
         }
+    },
+    mounted() {
+        axios.
+            get('/folders/suggest_folder_name').
+                then(response => this.updateFolderName(response.data)).
+                catch(error => console.log('Failed to suggested folder name: ' + error));
     }
 })
