@@ -148,6 +148,10 @@ app.component('image-upload', {
                     i++;
                 }
             }
+
+            if (this.files.length == 0) {
+                $( "#upload-dialog" ).dialog("close");
+            }
         },
         resetFilesNotYetUploaded() {
             for (var i = 0; i < this.files.length; ) {
