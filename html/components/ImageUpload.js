@@ -2,6 +2,24 @@ app.component('image-upload', {
     template:
     /*html*/
 `
+<div class="upload-dialog-item">
+    <form>
+        <h4 class="upload-title">Select Upload Folder</h4>
+        <div clas="upload-form-row">
+            <input type="radio" id="user" v-model="folderChoice" value="user">
+            <label for="user">New Folder Name</label>&nbsp;&nbsp;&nbsp;
+            <input :disabled="folderChoice != 'user'" type="text" id="newFolderName" v-model="folderName"><br/>
+        </div>
+        <div class="upload-form-row">
+            <input type="radio" id="existing" v-model="folderChoice" value="existing">
+            <label for="existing">Use Existing Folder</label>&nbsp;&nbsp;&nbsp;
+            <select :disabled="folderChoice != 'existing'" v-model="folderName">
+                <option :value="folderName">{{ folderName }}</option>
+                <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
+            </select>
+        </div>
+    </form>
+</div>
 <div class="upload-dialog-item" id="form-wrapper">
     <div class="upload-dialog-header-item">
         <form action="upload" enctype="multipart/form-data" @submit.prevent="onSubmit">
@@ -40,7 +58,10 @@ app.component('image-upload', {
             fileIndex: 0,
             uploading: 0,
             filesToUpload: 0,
-            folderName: null
+            folderName: null,
+            suggestedFolderName: null,
+            folderList: [],
+            folderChoice: 'user'
         }
     },
     props: {
@@ -49,6 +70,11 @@ app.component('image-upload', {
         }
     },
     methods: {
+        updateFolderList(folderList) {
+            for (const folderName of folderList) {
+                this.folderList.push(folderName)
+            }
+        },
         onChange(evt) {
             var files = evt.target.files || evt.dataTransfer.files;
             for (file of files) {
@@ -168,9 +194,15 @@ app.component('image-upload', {
         },
         updateFolderName(folderName) {
             this.folderName = folderName;
+            this.suggestedFolderName = folderName;
         }
     },
     mounted() {
+        this.folderList = [];
+        axios.
+            get('/folders/').
+            then(response => this.updateFolderList(response.data)).
+            catch(error => console.log('Failed to get image list: ' + error));
         axios.
             get('/folders/suggest_folder_name').
                 then(response => this.updateFolderName(response.data)).
