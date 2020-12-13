@@ -22,7 +22,8 @@ const app = Vue.createApp({
         },
         showUploadDialog() {
             this.upload_dialog_mounts++;
-            $( "#upload-dialog" ).dialog({width: 800, height: 600});
+            $('#upload-dialog').dialog({width: 800, height: 600});
+            $('#userSelectedFolderName').focus();
         }
     },
     computed: {

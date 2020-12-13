@@ -4,20 +4,22 @@ app.component('image-upload', {
 `
 <div class="upload-dialog-item">
     <form>
-        <h4 class="upload-title">Select Upload Folder</h4>
-        <div clas="upload-form-row">
-            <input type="radio" id="user" v-model="folderChoice" value="user">
-            <label for="user">Choose Folder Name</label>&nbsp;&nbsp;&nbsp;
-            <input :disabled="folderChoice != 'user'" type="text" id="newFolderName" v-model="userEnteredName">
-        </div>
-        <div class="upload-form-row">
-            <input type="radio" id="existing" v-model="folderChoice" value="existing">
-            <label for="existing">Select Folder</label>&nbsp;&nbsp;&nbsp;
-            <select :disabled="folderChoice != 'existing'" v-model="folderName">
-                <option :value="folderName">{{ folderName }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(New Folder)</option>
-                <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
-            </select>
-        </div>
+        <fieldset>
+            <legend class="upload-title">Select Upload Folder</legend>
+            <div clas="upload-form-row">
+                <input type="radio" id="user" v-model="folderChoice" value="user">
+                <label for="user">Choose Folder Name</label>&nbsp;&nbsp;&nbsp;
+                <input :disabled="folderChoice != 'user'" type="text" id="userSelectedFolderName" v-model="userEnteredName">
+            </div>
+            <div class="upload-form-row">
+                <input type="radio" id="existing" v-model="folderChoice" value="existing">
+                <label for="existing">Select Folder</label>&nbsp;&nbsp;&nbsp;
+                <select :disabled="folderChoice != 'existing'" v-model="folderName">
+                    <option :value="folderName">{{ folderName }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(New Folder)</option>
+                    <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
+                </select>
+            </div>
+        </fieldset>
     </form>
 </div>
 <div class="upload-dialog-item" id="form-wrapper">
