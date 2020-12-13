@@ -7,14 +7,14 @@ app.component('image-upload', {
         <h4 class="upload-title">Select Upload Folder</h4>
         <div clas="upload-form-row">
             <input type="radio" id="user" v-model="folderChoice" value="user">
-            <label for="user">New Folder Name</label>&nbsp;&nbsp;&nbsp;
-            <input :disabled="folderChoice != 'user'" type="text" id="newFolderName" v-model="folderName"><br/>
+            <label for="user">Choose Folder Name</label>&nbsp;&nbsp;&nbsp;
+            <input :disabled="folderChoice != 'user'" type="text" id="newFolderName" v-model="userEnteredName">
         </div>
         <div class="upload-form-row">
             <input type="radio" id="existing" v-model="folderChoice" value="existing">
-            <label for="existing">Use Existing Folder</label>&nbsp;&nbsp;&nbsp;
+            <label for="existing">Select Folder</label>&nbsp;&nbsp;&nbsp;
             <select :disabled="folderChoice != 'existing'" v-model="folderName">
-                <option :value="folderName">{{ folderName }}</option>
+                <option :value="folderName">{{ folderName }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(New Folder)</option>
                 <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
             </select>
         </div>
@@ -38,7 +38,7 @@ app.component('image-upload', {
                 <button v-on:click="removeFile(file.index)">X</button>
             </div>
             <div class="upload-file-list-item upload-file-list-file-name">
-                {{ file.file.name }} - 
+                {{ file.file.name }}
             </div>
             <div class="upload-file-list-item upload-file-list-state">
                 {{ file.state }}
@@ -61,7 +61,8 @@ app.component('image-upload', {
             folderName: null,
             suggestedFolderName: null,
             folderList: [],
-            folderChoice: 'user'
+            folderChoice: 'user',
+            userEnteredName: ''
         }
     },
     props: {
@@ -114,6 +115,14 @@ app.component('image-upload', {
         },
         uploadFiles() {
             console.log('uploadFiles ' + this.files.length + ':');
+            if (this.folderChoice == 'user') {
+                if (this.userEnteredName == '') {
+                    // TODO: Find a way to put a red start on the missing field.
+                    alert('You must specify a new folder name.');
+                    return;
+                }
+                this.folderName = this.userEnteredName;
+            }
             for (var i = 0; i < this.files.length; i++) {
                 if (this.uploading >= 4) {
                     console.log(this.uploading + ' files currently uploading. Setting timeout and returning');
