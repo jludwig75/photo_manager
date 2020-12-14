@@ -6,17 +6,17 @@ app.component('image-upload', {
     <form>
         <fieldset>
             <legend class="upload-title">Select Upload Folder</legend>
-            <div clas="upload-form-row">
-                <input type="radio" id="user" v-model="folderChoice" value="user">
-                <label for="user">Create New Folder</label>&nbsp;&nbsp;&nbsp;
-                <input :disabled="folderChoice != 'user'" type="text" id="userSelectedFolderName" v-model="userEnteredName">
-            </div>
             <div class="upload-form-row">
                 <input type="radio" id="existing" v-model="folderChoice" value="existing">
                 <label for="existing">Select Existing Folder</label>&nbsp;&nbsp;&nbsp;
                 <select :disabled="folderChoice != 'existing'" v-model="folderName">
                     <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
                 </select>
+            </div>
+            <div clas="upload-form-row">
+                <input type="radio" id="user" v-model="folderChoice" value="user">
+                <label for="user">Create New Folder</label>&nbsp;&nbsp;&nbsp;
+                <input :disabled="folderChoice != 'user'" type="text" id="userSelectedFolderName" v-model="userEnteredName">
             </div>
         </fieldset>
     </form>
@@ -63,7 +63,7 @@ app.component('image-upload', {
             folderName: null,
             suggestedFolderName: null,
             folderList: [],
-            folderChoice: 'user',
+            folderChoice: 'existing',
             userEnteredName: '',
             totalBytes: 0,
             uploadedBytes: 0
