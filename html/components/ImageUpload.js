@@ -8,14 +8,13 @@ app.component('image-upload', {
             <legend class="upload-title">Select Upload Folder</legend>
             <div clas="upload-form-row">
                 <input type="radio" id="user" v-model="folderChoice" value="user">
-                <label for="user">Choose Folder Name</label>&nbsp;&nbsp;&nbsp;
+                <label for="user">Create New Folder</label>&nbsp;&nbsp;&nbsp;
                 <input :disabled="folderChoice != 'user'" type="text" id="userSelectedFolderName" v-model="userEnteredName">
             </div>
             <div class="upload-form-row">
                 <input type="radio" id="existing" v-model="folderChoice" value="existing">
-                <label for="existing">Select Folder</label>&nbsp;&nbsp;&nbsp;
+                <label for="existing">Select Existing Folder</label>&nbsp;&nbsp;&nbsp;
                 <select :disabled="folderChoice != 'existing'" v-model="folderName">
-                    <option :value="folderName">{{ folderName }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(New Folder)</option>
                     <option v-for="folder in folderList" :value="folder">{{ folder }}</option>
                 </select>
             </div>
@@ -73,12 +72,19 @@ app.component('image-upload', {
     props: {
         upload_dialog_mounts: {
             required: true
+        },
+        current_folder_name: {
+            type: String,
+            required: false
         }
     },
     methods: {
         updateFolderList(folderList) {
             for (const folderName of folderList) {
                 this.folderList.push(folderName)
+            }
+            if (this.current_folder_name != null && this.folderList.includes(this.current_folder_name)) {
+                this.folderName = this.current_folder_name;
             }
         },
         onChange(evt) {
@@ -225,6 +231,7 @@ app.component('image-upload', {
         updateFolderName(folderName) {
             this.folderName = folderName;
             this.suggestedFolderName = folderName;
+            this.userEnteredName = folderName;
         }
     },
     mounted() {
