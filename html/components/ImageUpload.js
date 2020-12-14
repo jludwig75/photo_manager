@@ -51,6 +51,7 @@ app.component('image-upload', {
 <div class="upload-dialog-item">
     <div>
         <button :disabled="files.length == 0 || this.filesToUpload > 0" v-on:click="onUploadFiles">Upload Files</button>
+        &nbsp;&nbsp;<span v-if="this.filesToUpload > 0">{{ Math.round(100 * uploadedBytes / totalBytes) }}&percnt;&nbsp;&nbsp;-&nbsp;&nbsp;{{ files.length - filesToUpload }} of </span><span>{{ files.length }} files</span>
     </div>
 </div>
 `,
@@ -64,7 +65,9 @@ app.component('image-upload', {
             suggestedFolderName: null,
             folderList: [],
             folderChoice: 'user',
-            userEnteredName: ''
+            userEnteredName: '',
+            totalBytes: 0,
+            uploadedBytes: 0
         }
     },
     props: {
@@ -89,6 +92,12 @@ app.component('image-upload', {
                                     });
                 }
             }
+            this.totalBytes = 0;
+            for (var i = 0; i < this.files.length; i++) {
+                if (this.files[i].state == 'Ready') {
+                    this.totalBytes += this.files[i].file.size;
+                }
+            }
             document.getElementById('single-file').value = '';
         },
         fileInList(files, file) {
@@ -111,6 +120,7 @@ app.component('image-upload', {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
         onUploadFiles() {
+            this.uploadedBytes = 0;
             this.resetFilesNotYetUploaded();
             this.filesToUpload = this.files.length;
             this.uploadFiles();
@@ -149,13 +159,22 @@ app.component('image-upload', {
                     req.addEventListener("abort", function (evt) {
                         this.handleUploadCompletion(index, evt, true);
                     }.bind(this));
+                    req.addEventListener("progress", function (evt) {
+                        this.handleUploadProgress(index, evt);
+                    }.bind(this));
                     req.open('POST', '/upload');
                     var ret = req.send(formData);
                     console.log('Sent upload post for file ' + i);
                 }
             }
         },
+        handleUploadProgress(index, evt) {
+            if (evt.lengthComputable) {
+                console.log('upload progress ' + this.files[index].name + ': ' + evt.loaded + ' of ' + evt.total);
+            }
+        },
         handleUploadCompletion(index, evt, failed=false) {
+            this.uploadedBytes += this.files[index].file.size;
             if (failed) {
                 this.files[index].state = 'Failed';
             } else {
