@@ -86,6 +86,9 @@ app.component('image-upload', {
             if (this.current_folder_name != null && this.folderList.includes(this.current_folder_name)) {
                 this.folderName = this.current_folder_name;
             }
+            if (this.folderList.length == 0 || this.current_folder_name == null) {
+                this.folderChoice = 'user';
+            }
         },
         onChange(evt) {
             var files = evt.target.files || evt.dataTransfer.files;
