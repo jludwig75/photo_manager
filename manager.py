@@ -52,7 +52,7 @@ class Image(FileSystemEntity):
         return open(self.path, 'rb')
     @property
     def thumbnail(self):
-        return open(self.path, 'rb')
+        return open(self.thumbnailPath, 'rb')
 
 class Folder(FileSytemContainer):
     def __init__(self, name, rootPath):
