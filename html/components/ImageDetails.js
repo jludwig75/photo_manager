@@ -39,6 +39,8 @@ app.component('image-details', {
         },
         getDetailsList(image) {
             var detailsList = [];
+            var imageLocation = null;
+            var imageSize = null;
             for (var key in image) {
                 if (!image.hasOwnProperty(key)) {
                     continue;
@@ -55,19 +57,36 @@ app.component('image-details', {
                     value = this.sizeString(value);
                 }
                 newKey = key.replace(/_bytes/g, '')
-                var locationLink = null;
                 if (key.toUpperCase().includes('LOCATION')) {
-                    locationLink = 'https://www.google.com/maps/place/' + value;
-                }
-                detailsList.push({
+                    imageLocation = {
+                                'name': this.formatKeyName(newKey),
+                                'value': value,
+                                'locationLink': 'https://www.google.com/maps/place/' + value
+                               };
+                } else if (key == 'size_bytes') {
+                    imageSize = {
                                     'name': this.formatKeyName(newKey),
                                     'value': value,
-                                    'locationLink': locationLink
-                                })
+                                    'locationLink': null
+                                };
+                }
+                else {
+                    detailsList.push({
+                                        'name': this.formatKeyName(newKey),
+                                        'value': value,
+                                        'locationLink': null
+                                    });
+                }
             }
             detailsList.sort((book1, book2) => {
                 return this.compareObjects(book1, book2, 'name')
             });
+            if (imageLocation != null) {
+                detailsList.unshift(imageLocation);
+            }
+            if (imageSize != null) {
+                detailsList.unshift(imageSize);
+            }
             return detailsList;
         },
         unCamelCase(str) {
