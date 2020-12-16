@@ -13,7 +13,8 @@ app.component('image-details', {
     </div>
     <div class="image-detail-value">
         <span v-if="current_image != null">
-            {{ detail.value }}
+            <span v-if="detail.locationLink != null"><a :href="detail.locationLink" target="_blank">{{ detail.value }}</a></span>
+            <span v-else>{{ detail.value }}</span>
         </span>
     </div>
 </div>
@@ -54,9 +55,14 @@ app.component('image-details', {
                     value = this.sizeString(value);
                 }
                 newKey = key.replace(/_bytes/g, '')
+                var locationLink = null;
+                if (key.toUpperCase().includes('LOCATION')) {
+                    locationLink = 'https://www.google.com/maps/place/' + value;
+                }
                 detailsList.push({
                                     'name': this.formatKeyName(newKey),
-                                    'value': value
+                                    'value': value,
+                                    'locationLink': locationLink
                                 })
             }
             detailsList.sort((book1, book2) => {
