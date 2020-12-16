@@ -77,9 +77,13 @@ def loadImageExifData(imageFileName):
         return None
     values = {}
     for category, entries in exifData.items():
+        if category.lower() == 'thumbnail':
+            continue
         if category.lower() == 'image':
             category = None
         for key, value in entries.items():
+            if key.lower() == 'padding':
+                continue
             if category:
                 key = ' '.join((category, key))
             if isinstance(value, exifread.utils.Ratio):
