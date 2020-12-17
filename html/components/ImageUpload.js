@@ -157,7 +157,6 @@ app.component('image-upload', {
                     let req = new XMLHttpRequest();
                     let formData = new FormData();
                     formData.append('fileToUpload', this.files[i].file);
-                    formData.append('folder', this.folderName);
                     let index = i;
                     req.addEventListener("load", function (evt) {
                         this.handleUploadCompletion(index, evt);
@@ -171,7 +170,7 @@ app.component('image-upload', {
                     req.addEventListener("progress", function (evt) {
                         this.handleUploadProgress(index, evt);
                     }.bind(this));
-                    req.open('POST', '/upload');
+                    req.open('POST', '/folders/' + this.folderName + '/images');
                     var ret = req.send(formData);
                     console.log('Sent upload post for file ' + i);
                 }

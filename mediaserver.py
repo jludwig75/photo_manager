@@ -54,16 +54,44 @@ class Folder(object):
     def index(self, folder_name):
         if cherrypy.request.method == 'GET':
             return json.dumps(self._getFolder(folder_name).stats)
-        elif cherrypy.request.method == 'POST':
+        else: # POST
             folder = self._photoManager.addFolder(folder_name)
             if folder is None:
                 raise cherrypy.HTTPError(status=500, message=f'Error creating folder {folder_name}')
             return 'OK'
 
+    def _uploadFile(self, folder, fileToUpload):
+        uploadFolder = self._photoManager.folder(folder)
+        if uploadFolder is None:
+            self._photoManager.addFolder(folder)
+            uploadFolder = self._photoManager.folder(folder)
+            if uploadFolder is None:
+                raise cherrypy.HTTPError(status=404, message=f'Upload folder {folder} not found')
+        class ImageWriter:
+            def __init__(self, fileToUpload):
+                self.fileToUpload = fileToUpload
+            def writeImage(self, handle):
+                while True:
+                    data = fileToUpload.file.read(8192)
+                    if not data:
+                        break
+                    handle.write(data)
+        writer = ImageWriter(fileToUpload)
+        img = uploadFolder.addImage(fileToUpload.filename, writer.writeImage)
+        if img is None:
+            print(f'Image {fileToUpload.filename} already exists in {folder}')
+            raise cherrypy.HTTPError(status=409, message=f'Image {fileToUpload.filename} is already in {folder}')
+
     @cherrypy.expose
-    @cherrypy.tools.allow(methods=['GET'])
-    def images(self, folder_name):
-        return json.dumps(self._getFolder(folder_name).images)
+    @cherrypy.tools.allow(methods=['GET', 'POST'])
+    def images(self, folder_name, **kwargs):
+        if cherrypy.request.method == 'GET':
+            return json.dumps(self._getFolder(folder_name).images)
+        else: # POST
+            if not 'fileToUpload' in kwargs:
+                raise cherrypy.HTTPError(status=400, message='Missing argument "fileToUpload"')
+            fileToUpload = kwargs['fileToUpload']
+            self._uploadFile(folder_name, fileToUpload)
     
     def _getFolder(self, folderName):
         folder = self._photoManager.folder(folderName)
@@ -72,8 +100,8 @@ class Folder(object):
         return folder
 
 class FolderManager(object):
-    def __init__(self, photoManager):
-        self._photoManager = photoManager
+    def __init__(self, photoRoot):
+        self._photoManager = PhotoManager(photoRoot)
         self.folders = Folder(self._photoManager)
         self.images = Image(self._photoManager)
 
