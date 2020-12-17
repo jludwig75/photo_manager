@@ -2,7 +2,7 @@ import cherrypy
 import cherrypy.lib
 from mimetypesdb import getMimeType
 import json
-from manager import PhotoManager
+from photomanager import PhotoManager
 import os
 
 
@@ -99,7 +99,7 @@ class Folder(object):
             raise cherrypy.HTTPError(status=400, message='Folder {0} not found'.format(folderName))
         return folder
 
-class FolderManager(object):
+class MediaServer(object):
     def __init__(self, photoRoot):
         self._photoManager = PhotoManager(photoRoot)
         self.folders = Folder(self._photoManager)

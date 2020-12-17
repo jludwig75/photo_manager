@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import cherrypy
 import os
-from mediaserver import FolderManager
+from mediaserver import MediaServer
 
 
 class Root(object):
@@ -19,5 +19,5 @@ if __name__ == "__main__":
     }
     cherrypy.config.update({'server.socket_port': 8086})
     cherrypy.server.socket_host = '0.0.0.0'
-    cherrypy.tree.mount(FolderManager('photos'), '/folders', conf)
+    cherrypy.tree.mount(MediaServer('photos'), '/folders', conf)
     cherrypy.quickstart(Root(), '/', conf)
