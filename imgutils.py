@@ -28,36 +28,42 @@ def getOrientation(image):
         return None
     return exif[ORIENTATION_TAG]
 
-def generateThumbNail(imagePath, destinationFolder):
-    image = Image.open(imagePath)
-    if not image:
-        return False
-    orientation = getOrientation(image)
-    if orientation:
-        print(f'Image orientation: {orientation}')
-    newSize = scaleSize(image.size)
-    image = image.resize(newSize, Image.LANCZOS)
-    imageFileName = imagePath
-    if '/' in imageFileName:
-        imageFileName = imageFileName[imageFileName.rfind('/')+1:]
-    thumbnailPath = os.path.join(destinationFolder, imageFileName)
+def fixImageOrientation(image, orientation):
     val = [orientation]
     if 5 in val:
         val += [4,8]
     if 7 in val:
         val += [4, 6]
     if 3 in val:
-        print("Rotating by 180 degrees.")
         image = image.transpose(Image.ROTATE_180)
     if 4 in val:
-        print("Mirroring horizontally.")
         image = image.transpose(Image.FLIP_TOP_BOTTOM)
     if 6 in val:
-        print("Rotating by 270 degrees.")
         image = image.transpose(Image.ROTATE_270)
     if 8 in val:
-        print("Rotating by 90 degrees.")
         image = image.transpose(Image.ROTATE_90)
+    return image
+
+def generateThumbNail(imagePath, destinationFolder):
+    image = Image.open(imagePath)
+    if not image:
+        return False
+
+    # Save off the original image orientation
+    orientation = getOrientation(image)
+
+    # Generate thumbnail image
+    image.thumbnail((MAX_WIDTH, MAX_HEIGHT))
+
+    # Fix thumbnail image orientation, because the
+    # orientation in the EXIF data is not in the thumbnail.
+    image = fixImageOrientation(image, orientation)
+
+    # Save the thumbnail
+    imageFileName = imagePath
+    if '/' in imageFileName:
+        imageFileName = imageFileName[imageFileName.rfind('/')+1:]
+    thumbnailPath = os.path.join(destinationFolder, imageFileName)
     image.save(thumbnailPath)
 
 
