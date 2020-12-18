@@ -54,14 +54,17 @@ class Replicator:
             return
         if not imageName in serverImages:
             print(f'    Uploading image {imageName}...')
-            image = folder.image(imageName)
-            if self._client.uploadImage(folderName, imageName, image.content):
-                print(f'    Successfully uploading image {imageName}')
-            else:
-                print('    ' + self._reportError(f'Failed to upload image {imageName}'))
+            self._uploadImage(folder, imageName)
         else:
             print(f'    Image {imageName} already exists')
         print(f'  Done replicating image {imageName}')
+
+    def _uploadImage(self, folder, imageName):
+        image = folder.image(imageName)
+        if self._client.uploadImage(folder.name, imageName, image.content):
+            print(f'    Successfully uploading image {imageName}')
+        else:
+            print('    ' + self._reportError(f'Failed to upload image {imageName}'))
 
     def _reportCompletion(self):
         print(f'\nReplication completed with {len(self._errors)} errors')
