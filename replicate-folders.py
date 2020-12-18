@@ -6,52 +6,83 @@ import sys
 import time
 
 
-def replicateAlbum(source, destination):
-    errors = []
-    manager = PhotoManager(source)
-    client = MediaClient(destination)
-    for folderName in manager.folders:
+class Replicator:
+    def __init__(self, source, destination):
+        self._destination = destination
+        self._manager = PhotoManager(source)
+        self._client = MediaClient(destination)
+        self._errors = []
+
+    def replicate(self):
+        self._replicateFolders()
+        self._reportCompletion()
+
+    def _replicateFolders(self):
+        serverFolders = self._client.folders()
+        if serverFolders is None:
+            print(self._reportError(f'Failed to get folder list from {self._destination}'))
+            return
+
+        for folderName in self._manager.folders:
+                self._replicateFolder(serverFolders, folderName)
+
+    def _replicateFolder(self, serverFolders, folderName):
         print(f'Replicating folder {folderName}...')
-        if not client.folderExists(folderName):
-            if client.createFolder(folderName):
+        if not folderName in serverFolders:
+            if self._client.createFolder(folderName):
                 print(f'  Successfully created folder {folderName}')
             else:
-                error = f'Failed to create folder {folderName}. Not uploading folder images'
-                errors.append('Error: ' + error)
-                print(f'  {error}')
-                continue
+                print('  ' + self._reportError(f'Failed to create folder {folderName}. Not uploading folder images'))
         else:
-            print('  Folder {folderName} already exists')
-        folder = manager.folder(folderName)
-        for imageName in folder.images:
-            print(f'  Replicating image {imageName}...')
-            if not hasMediaFileExtension(imageName):
-                warning = f'Skipping non-media file {imageName}'
-                errors.append('Warning: ' + warning)
-                print(f'    {warning}')
-            if not client.imageExists(folderName, imageName):
-                print(f'    Uploading image {imageName}...')
-                image = folder.image(imageName)
-                if client.uploadImage(folderName, imageName, image.content):
-                    print(f'    Successfully uploading image {imageName}')
-                else:
-                    error = f'Failed to upload image {imageName}'
-                    errors.append('Error: ' + error)
-                    print(f'    {error}')
-            else:
-                print(f'    Image {imageName} already exists')
-            print(f'  Done replicating image {imageName}')
+            print(f'  Folder {folderName} already exists')
+        self._replicateFolderImages(folderName)
         print(f'Done replicating folder {folderName}')
-    print(f'\nReplication completed with {len(errors)} errors')
-    if len(errors) > 0:
-        errorLog = 'Errors:\n'
-        for error in errors:
-            errorLog += f'  {error}\n'
-        print(errorLog)
-        errorLogFileName = f'error-{str(time.time())}.log'
-        print(f'Writing errors to error log {errorLogFileName}')
-        with open(errorLogFileName, 'wt') as out:
-            out.write(errorLog)
+
+    def _replicateFolderImages(self, folderName):
+        serverImages = self._client.images(folderName)
+        if serverImages is None:
+            print('  ' + self._reportError(f'Failed to get images in {folderName}. Not uploading folder images'))
+            return
+        folder = self._manager.folder(folderName)
+        for imageName in folder.images:
+            self._replicateImage(serverImages, folder, folderName, imageName)
+
+    def _replicateImage(self, serverImages, folder, folderName, imageName):
+        print(f'  Replicating image {imageName}...')
+        if not hasMediaFileExtension(imageName):
+            print('    ' + self._reportWarning(f'Skipping non-media file {imageName}'))
+            return
+        if not imageName in serverImages:
+            print(f'    Uploading image {imageName}...')
+            image = folder.image(imageName)
+            if self._client.uploadImage(folderName, imageName, image.content):
+                print(f'    Successfully uploading image {imageName}')
+            else:
+                print('    ' + self._reportError(f'Failed to upload image {imageName}'))
+        else:
+            print(f'    Image {imageName} already exists')
+        print(f'  Done replicating image {imageName}')
+
+    def _reportCompletion(self):
+        print(f'\nReplication completed with {len(self._errors)} errors')
+        if len(self._errors) > 0:
+            errorLog = 'Errors:\n'
+            for error in self._errors:
+                errorLog += f'  {error}\n'
+            print(errorLog)
+            errorLogFileName = f'error-{str(time.time())}.log'
+            print(f'Writing errors to error log {errorLogFileName}')
+            with open(errorLogFileName, 'wt') as out:
+                out.write(errorLog)
+    
+    def _reportError(self, message):
+        self._errors.append(f'Error: {message}')
+        return message
+
+    def _reportWarning(self, message):
+        self._errors.append(f'Warning: {message}')
+        return message
+
 
 def main(args):
     if len(args) < 2:
@@ -61,7 +92,7 @@ def main(args):
         print('Too many arguments. expect source folder and destination server')
         sys.exit(-1)
     source, destination = args
-    replicateAlbum(source, destination)
+    Replicator(source, destination).replicate()
 
 
 if __name__ == "__main__":
