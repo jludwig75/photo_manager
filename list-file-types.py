@@ -20,6 +20,8 @@ def main(args):
             if len(ext) == 0:
                 continue
             ext = ext[1:]
+            if not ext in extensions:
+                print(ext)
             extensions.add(ext)
     print(extensions)
 
