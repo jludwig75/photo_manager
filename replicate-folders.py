@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import functools
 from mediaclient import MediaClient
-from photomanager import PhotoManager
 from mimetypesdb import hasMediaFileExtension
+from multiprocessing import Pool
+from photomanager import PhotoManager
 import sys
 import time
 
@@ -36,7 +38,7 @@ class Replicator:
         else:
             print(f'  Folder {folderName} already exists')
         self._replicateFolderImages(folderName)
-        print(f'Done replicating folder {folderName}')
+        print(f'  Done replicating folder {folderName}')
 
     def _replicateFolderImages(self, folderName):
         serverImages = self._client.images(folderName)
@@ -44,8 +46,10 @@ class Replicator:
             print('  ' + self._reportError(f'Failed to get images in {folderName}. Not uploading folder images'))
             return
         folder = self._manager.folder(folderName)
-        for imageName in folder.images:
-            self._replicateImage(serverImages, folder, folderName, imageName)
+        with Pool(4) as pool:
+            pool.map(functools.partial(self._replicateImage, serverImages, folder, folderName), folder.images)
+        # for imageName in folder.images:
+        #     self._replicateImage(serverImages, folder, folderName, imageName)
 
     def _replicateImage(self, serverImages, folder, folderName, imageName):
         print(f'  Replicating image {imageName}...')
@@ -57,7 +61,7 @@ class Replicator:
             self._uploadImage(folder, imageName)
         else:
             print(f'    Image {imageName} already exists')
-        print(f'  Done replicating image {imageName}')
+        print(f'    Done replicating image {imageName}')
 
     def _uploadImage(self, folder, imageName):
         image = folder.image(imageName)
