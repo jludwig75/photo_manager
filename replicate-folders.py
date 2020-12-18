@@ -61,10 +61,11 @@ class Replicator:
 
     def _uploadImage(self, folder, imageName):
         image = folder.image(imageName)
-        if self._client.uploadImage(folder.name, imageName, image.content):
-            print(f'    Successfully uploading image {imageName}')
-        else:
-            print('    ' + self._reportError(f'Failed to upload image {imageName}'))
+        with image.content:
+            if self._client.uploadImage(folder.name, imageName, image.content):
+                print(f'    Successfully uploading image {imageName}')
+            else:
+                print('    ' + self._reportError(f'Failed to upload image {imageName}'))
 
     def _reportCompletion(self):
         print(f'\nReplication completed with {len(self._errors)} errors')
