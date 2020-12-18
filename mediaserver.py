@@ -39,10 +39,10 @@ class Image(object):
     def _getImage(self, folderName, imageName):
         folder = self._photoManager.folder(folderName)
         if folder is None:
-            raise cherrypy.HTTPError(status=400, message='Folder {0} not found'.format(folderName))
+            raise cherrypy.HTTPError(status=404, message='Folder {0} not found'.format(folderName))
         image = folder.image(imageName)
         if image is None:
-            raise cherrypy.HTTPError(status=400, message='Image {0} not found in folder {1}'.format(imageName, folderName))
+            raise cherrypy.HTTPError(status=404, message='Image {0} not found in folder {1}'.format(imageName, folderName))
         return image
 
 class Folder(object):
@@ -96,7 +96,7 @@ class Folder(object):
     def _getFolder(self, folderName):
         folder = self._photoManager.folder(folderName)
         if folder is None:
-            raise cherrypy.HTTPError(status=400, message='Folder {0} not found'.format(folderName))
+            raise cherrypy.HTTPError(status=404, message='Folder {0} not found'.format(folderName))
         return folder
 
 class MediaServer(object):
