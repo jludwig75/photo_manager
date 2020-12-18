@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 # https://help.intelligencebank.com/hc/en-us/articles/115005575806-Image-Annotations-Supported-Formats-Mime-Types-
 # https://www.sitepoint.com/mime-types-complete-list/ # Not really complete
@@ -44,6 +46,12 @@ def getMimeType(extension):
     if not extension in _mime_types_map:
         return None
     return _mime_types_map[extension]
+
+def hasMediaFileExtension(fileName):
+    path, ext = os.path.splitext(fileName)
+    if len(ext) == 0:
+        return False
+    return ext[1:].lower() in _mime_types_map
 
 loadMimeTypes()
 
