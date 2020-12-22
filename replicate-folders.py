@@ -67,7 +67,7 @@ class Replicator:
         image = folder.image(imageName)
         with image.content:
             if self._client.uploadImage(folder.name, imageName, image.content):
-                print(f'    Successfully uploading image {imageName}')
+                print(f'    Successfully uploaded image {imageName}')
             else:
                 print('    ' + self._reportError(f'Failed to upload image {imageName}'))
 

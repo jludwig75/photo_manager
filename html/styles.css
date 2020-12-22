@@ -16,6 +16,15 @@ li.image-list-item {
     height: auto;
 }
 
+.img-replacement {
+    width: 150px;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 ul.folder-list {
     padding: 0px;
 }

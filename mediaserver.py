@@ -34,7 +34,10 @@ class Image(object):
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     def thumbnail(self, folder_name, image_name):
-        image = self._getImage(folder_name, image_name)
+        if image_name.lower().endswith('mov'):
+            image = self._getImage('../html', 'blank.png')
+        else:
+            image = self._getImage(folder_name, image_name)
         return cherrypy.lib.static.serve_file(os.path.abspath(image.thumbnailPath), _getImageMimeType(image.name))
     def _getImage(self, folderName, imageName):
         folder = self._photoManager.folder(folderName)

@@ -45,7 +45,10 @@ def fixImageOrientation(image, orientation):
     return image
 
 def generateThumbNail(imagePath, destinationFolder):
-    image = Image.open(imagePath)
+    try:
+        image = Image.open(imagePath)
+    except:
+        return False
     if not image:
         return False
 
@@ -65,6 +68,7 @@ def generateThumbNail(imagePath, destinationFolder):
         imageFileName = imageFileName[imageFileName.rfind('/')+1:]
     thumbnailPath = os.path.join(destinationFolder, imageFileName)
     image.save(thumbnailPath)
+    return True
 
 
 if __name__ == "__main__":

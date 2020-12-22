@@ -43,8 +43,10 @@ class Image(FileSystemEntity):
             os.mkdir(thumbnailDir)
         thumbnailPath = os.path.join(thumbnailDir, self.name)
         if not os.path.exists(thumbnailPath):
-            generateThumbNail(self.path, thumbnailDir)
-            if not os.path.exists(thumbnailPath):
+            created = generateThumbNail(self.path, thumbnailDir)
+            if not created or not os.path.exists(thumbnailPath):
+                if self.name.lower().endswith('mov'):
+                    return '/html/blank.png'
                 return self.path
         return thumbnailPath
     @property

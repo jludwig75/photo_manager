@@ -11,7 +11,12 @@ app.component('image-list', {
           :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
           :id="'image-' + image.index"
         >
-            <img class="image-list-item" :src="image.thumbNail" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" height="90">
+            <!-- <img class="image-list-item" :src="image.thumbNail" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)"> -->
+            <!-- This div below replaces the image with a background so the user doesn't try to download the 
+                 thumbnail image thinking they will get the full size image. I left the old code in, because
+                 there might be a performance issue using the background image technique.
+             -->
+            <div class="img-replacement" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" :style="{ backgroundImage: 'url(' + image.thumbNailPath + ')' }"></div>
         </li>
     </ul>
     <br/>
@@ -50,6 +55,7 @@ app.component('image-list', {
                 }
                 image[key] = value
             }
+            image['thumbNailPath'] = "'" + image.thumbNail + "'"
         },
         updateImageData(imageData) {
             var index = imageData['userContext']
