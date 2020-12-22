@@ -92,6 +92,7 @@ class Folder(object):
         if img is None:
             print(f'Image {fileToUpload.filename} already exists in {folder}')
             raise cherrypy.HTTPError(status=409, message=f'Image {fileToUpload.filename} is already in {folder}')
+        uploadFolder.requestThumbNail(img)
 
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET', 'POST'])

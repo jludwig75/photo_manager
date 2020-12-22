@@ -45,6 +45,7 @@ def fixImageOrientation(image, orientation):
     return image
 
 def generateThumbNail(imagePath, destinationFolder):
+    print(f'Generating thumbnail of {imagePath}...')
     try:
         image = Image.open(imagePath)
     except:

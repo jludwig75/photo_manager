@@ -4,6 +4,35 @@ from imgutils import generateThumbNail
 from mimetypesdb import isImageFile, isVideoFile
 import os
 import shutil
+import threading
+
+
+class ThumbNailer:
+    def __init__(self):
+        self._imagesToThumbNail = []
+        self._cv = threading.Condition()
+        self._thread = threading.Thread(target=self.thumbNailThread)
+        self._thread.start()
+    def requestThumbNail(self, image, onComplete = None):
+        with self._cv:
+            self._imagesToThumbNail.append({ 'image': image, 'onComplete': onComplete })
+            self._cv.notify()
+    def thumbNailThread(self):
+        while True: # TODO: Don't keep it this way. Only start thread when there is work to do.
+            with self._cv:
+                while len(self._imagesToThumbNail) == 0:
+                    self._cv.wait()
+                imageRequest = self._imagesToThumbNail[0]
+                self._imagesToThumbNail.pop(0)
+            image = imageRequest['image']
+            thumbnailDir = os.path.join(image.folderPath, 'thumbnails')
+            if not os.path.exists(thumbnailDir):
+                os.mkdir(thumbnailDir)
+            generateThumbNail(image.path, thumbnailDir)
+            if imageRequest['onComplete'] is not None:
+                imageRequest['onComplete']()
+
+_nailer = ThumbNailer()
 
 class FileSystemEntity:
     def __init__(self, name, containerPath):
@@ -59,6 +88,9 @@ class Image(FileSystemEntity):
         return open(self.thumbnailPath, 'rb')
     def delete(self):
         os.remove(self.path)
+    @property
+    def folderPath(self):
+        return self._folderPath
 
 class Folder(FileSytemContainer):
     def __init__(self, name, rootPath):
@@ -103,8 +135,9 @@ class Folder(FileSytemContainer):
             return False
         # TODO: at least check the file extension too.
         return True
+    def requestThumbNail(self, image):
+        _nailer.requestThumbNail(image)
         
-
 class PhotoManager(FileSytemContainer):
     def __init__(self, rootPath):
         super().__init__('', rootPath)
