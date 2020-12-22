@@ -68,7 +68,7 @@ def generateThumbNail(imagePath, destinationFolder):
     if '/' in imageFileName:
         imageFileName = imageFileName[imageFileName.rfind('/')+1:]
     thumbnailPath = os.path.join(destinationFolder, imageFileName)
-    image.save(thumbnailPath)
+    image.save(thumbnailPath, quality=90)
     return True
 
 
