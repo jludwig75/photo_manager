@@ -12,8 +12,11 @@ app.component('folder-info', {
 <span class ="folder-info-item" v-if="folderInfo != null">
     {{ sizeString(folderInfo.size_bytes) }}
 </span>
-<span style="float: right">
+<span class ="folder-info-item" style="float: right">
     <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder" :key="folderInfo != null && folderInfo.image_count">Delete Folder</button>
+</span>
+<span class ="folder-info-item" style="float: right">
+    <button v-on:click="refreshFolder">Refresh Folder</button>
 </span>
 `,
     props: {
@@ -28,6 +31,9 @@ app.component('folder-info', {
         }
     },
     methods: {
+        refreshFolder() {
+            this.$emit('current-folder-refresh-requested');
+        },
         deleteFolder() {
             if (confirm("Are you sure you want to delete folder '" + this.current_folder_name + "'?")) {
                 axios.

@@ -3,9 +3,12 @@ app.component('folder-list', {
     /*html*/
 `
     <div class="menu-title">
-        <div class="component-title">
+        <span class="component-title folder-info-item">
             Folders
-        </div>
+        </span>
+        <span class="folder-info-item" style="float: right">
+            <button v-on:click="refreshFolderList">Refresh</button>
+        </span>
     </div>
     <ul>
         <li v-for="folder in folderList" v-on:click="onClickFolder(folder.name)">
@@ -57,13 +60,16 @@ app.component('folder-list', {
                 }
             }
             return false;
+        },
+        refreshFolderList() {
+            this.folderList = [];
+            axios.
+                get('/folders/').
+                then(response => this.updateFolderList(response.data)).
+                catch(error => console.log('Failed to get image list: ' + error));
         }
     },
     mounted() {
-        this.folderList = [];
-        axios.
-            get('/folders/').
-            then(response => this.updateFolderList(response.data)).
-            catch(error => console.log('Failed to get image list: ' + error));
+        this.refreshFolderList();
     }
 })

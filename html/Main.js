@@ -6,6 +6,7 @@ const app = Vue.createApp({
             upload_dialog_mounts: 0,
             folder_list_updates: 0,
             folder_info_updates: 0,
+            image_list_updates: 0,
             override_folder_selection: null
         }
     },
@@ -41,6 +42,9 @@ const app = Vue.createApp({
         },
         refreshFolderInfo() {
             this.folder_info_updates++;
+        },
+        refreshCurrentFolder() {
+            this.image_list_updates++;
         }
     },
     computed: {

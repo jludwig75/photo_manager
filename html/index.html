@@ -39,11 +39,11 @@
                 </div>
                 <div class="folder-info">
                     <div class="folder-info-content">
-                        <folder-info v-if="current_folder_name != null" @folder-deleted="onFolderDeleted" :current_folder_name="current_folder_name" :key="current_folder_name + folder_info_updates"></folder-info>
+                        <folder-info v-if="current_folder_name != null" @current-folder-refresh-requested="refreshCurrentFolder" @folder-deleted="onFolderDeleted" :current_folder_name="current_folder_name" :key="current_folder_name + folder_info_updates"></folder-info>
                     </div>
                 </div>
                 <div class="main-content">
-                    <image-list v-if="current_folder_name != null" @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name + folder_list_updates + current_image"></image-list>
+                    <image-list v-if="current_folder_name != null" @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name + folder_list_updates + current_image + image_list_updates"></image-list>
                 </div>
             </div>
 

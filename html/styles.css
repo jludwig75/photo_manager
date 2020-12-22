@@ -1,3 +1,7 @@
+button {
+    font-size: smaller;
+}
+
 li.image-list-item {
     float: left;
     width: 170px;
