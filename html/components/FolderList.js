@@ -39,7 +39,11 @@ app.component('folder-list', {
                 this.onClickFolder(folderList[0]);
             }
             else if (this.override_folder_selection != null && this.inFolderList(this.override_folder_selection)) {
-                this.selectedFolderName = this.override_folder_selection;
+                if (this.override_folder_selection == null) {
+                    this.onClickFolder(folderList[0]);
+                } else {
+                    this.selectedFolderName = this.override_folder_selection;
+                }
             }
         },
         onClickFolder(folderName) {

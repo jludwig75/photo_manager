@@ -25,6 +25,11 @@ const app = Vue.createApp({
             $('#upload-dialog').dialog({width: 800, height: 600});
             $('#userSelectedFolderName').focus();
         },
+        onFolderDeleted() {
+            this.override_folder_selection = null;
+            this.currentFolderName = null;
+            this.refreshFolderList();
+        },
         refreshFolderList() {
             this.folder_list_updates++;
         }
