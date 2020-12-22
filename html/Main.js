@@ -32,6 +32,9 @@ const app = Vue.createApp({
         },
         refreshFolderList() {
             this.folder_list_updates++;
+        },
+        onImageDeleted() {
+            this.currentImage = null;
         }
     },
     computed: {

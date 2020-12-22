@@ -13,7 +13,7 @@ app.component('folder-info', {
     {{ sizeString(folderInfo.size_bytes) }}
 </span>
 <span style="float: right">
-    <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder"> Delete Folder</button>
+    <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder">Delete Folder</button>
 </span>
 `,
     props: {

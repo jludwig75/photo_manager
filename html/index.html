@@ -34,7 +34,7 @@
             <div class="col-65 main">
                 <div style="display: none">
                     <div id="dialog" title="View Image" style="width: 80%">
-                        <img v-if="current_image != null" class="dialog-img" :src="current_image.link" :key="current_image">
+                        <image-dialog v-if="current_image != null" @image-deleted="onImageDeleted" :current_image="current_image" :current_folder_name="current_folder_name" :key="current_image"></image-dialog>
                     </div>
                 </div>
                 <div class="folder-info">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="main-content">
-                    <image-list v-if="current_folder_name != null" @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name + folder_list_updates"></image-list>
+                    <image-list v-if="current_folder_name != null" @image-selected="updateSelectedImage" :current_folder_name="current_folder_name" :key="current_folder_name + folder_list_updates + current_image"></image-list>
                 </div>
             </div>
 
@@ -64,6 +64,7 @@
         <script src="/components/ImageList.js"></script>
         <script src="/components/ImageDetails.js"></script>
         <script src="/components/ImageUpload.js"></script>
+        <script src="/components/ImageDialog.js"></script>
         <script>
             const mountedApp = app.mount('#app')
         </script>

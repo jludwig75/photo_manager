@@ -57,6 +57,8 @@ class Image(FileSystemEntity):
     @property
     def thumbnail(self):
         return open(self.thumbnailPath, 'rb')
+    def delete(self):
+        os.remove(self.path)
 
 class Folder(FileSytemContainer):
     def __init__(self, name, rootPath):

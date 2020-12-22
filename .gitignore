@@ -1,3 +1,5 @@
 __pycache__
 .vscode
 photos
+node_modules
+package-lock.json

@@ -21,11 +21,16 @@ class Image(object):
     def __init__(self, photoManager):
         self._photoManager = photoManager
     @cherrypy.expose
+    @cherrypy.tools.allow(methods=['GET', 'DELETE']) # Post could be used for user comments/tags
     def index(self, folder_name, image_name, userContext=None):
-        stats = self._getImage(folder_name, image_name).stats
-        if userContext is not None:
-            stats['userContext'] = userContext
-        return json.dumps(stats)
+        if cherrypy.request.method == 'GET':
+            stats = self._getImage(folder_name, image_name).stats
+            if userContext is not None:
+                stats['userContext'] = userContext
+            return json.dumps(stats)
+        elif cherrypy.request.method == 'DELETE':
+            image = self._getImage(folder_name, image_name)
+            image.delete()
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     def content(self, folder_name, image_name):
