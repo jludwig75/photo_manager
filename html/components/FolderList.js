@@ -2,13 +2,15 @@ app.component('folder-list', {
     template:
     /*html*/
 `
-    <div class="menu-title">
-        <span class="component-title folder-info-item">
-            Folders
-        </span>
-        <span class="folder-info-item" style="float: right">
-            <button v-on:click="refreshFolderList">Refresh</button>
-        </span>
+    <div class="folder-info">
+        <div class="folder-info-content" style="padding-left: 0">
+            <span class="folder-info-item component-title">
+                Folders
+            </span>
+            <span class="folder-info-item" style="float: right">
+                <button v-on:click="refreshFolderList">Refresh</button>
+            </span>
+        </div>
     </div>
     <ul>
         <li v-for="folder in folderList" v-on:click="onClickFolder(folder.name)">
