@@ -3,6 +3,9 @@ app.component('folder-info', {
     /*html*/
 `
 <span class ="component-title folder-info-item">{{ current_folder_name }}</span>
+<span class ="folder-info-item" v-if="folderInfo == null">
+    <b>Loading...</b>
+</span>
 <span class ="folder-info-item" v-if="folderInfo != null">
     {{ dateString(folderInfo.create_time) }}
 </span>
@@ -16,7 +19,7 @@ app.component('folder-info', {
     <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder" :key="folderInfo != null && folderInfo.image_count">Delete Folder</button>
 </span>
 <span class ="folder-info-item" style="float: right">
-    <button v-on:click="refreshFolder">Refresh Folder</button>
+    <button  :disabled="folderInfo == null" v-on:click="refreshFolder">Refresh Folder</button>
 </span>
 `,
     props: {
