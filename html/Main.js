@@ -5,6 +5,7 @@ const app = Vue.createApp({
             currentImage: null,
             upload_dialog_mounts: 0,
             folder_list_updates: 0,
+            folder_info_updates: 0,
             override_folder_selection: null
         }
     },
@@ -19,6 +20,7 @@ const app = Vue.createApp({
             this.override_folder_selection = folderName;
             this.currentFolderName = folderName;
             this.refreshFolderList();
+            this.refreshFolderInfo();
         },
         showUploadDialog() {
             this.upload_dialog_mounts++;
@@ -35,6 +37,10 @@ const app = Vue.createApp({
         },
         onImageDeleted() {
             this.currentImage = null;
+            this.refreshFolderInfo();
+        },
+        refreshFolderInfo() {
+            this.folder_info_updates++;
         }
     },
     computed: {

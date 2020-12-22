@@ -39,7 +39,7 @@
                 </div>
                 <div class="folder-info">
                     <div class="folder-info-content">
-                        <folder-info v-if="current_folder_name != null" @folder-deleted="onFolderDeleted" :current_folder_name="current_folder_name" :key="current_folder_name"></folder-info>
+                        <folder-info v-if="current_folder_name != null" @folder-deleted="onFolderDeleted" :current_folder_name="current_folder_name" :key="current_folder_name + folder_info_updates"></folder-info>
                     </div>
                 </div>
                 <div class="main-content">

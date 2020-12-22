@@ -13,7 +13,7 @@ app.component('folder-info', {
     {{ sizeString(folderInfo.size_bytes) }}
 </span>
 <span style="float: right">
-    <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder">Delete Folder</button>
+    <button :disabled="folderInfo == null || folderInfo.image_count > 0" v-on:click="deleteFolder" :key="folderInfo != null && folderInfo.image_count">Delete Folder</button>
 </span>
 `,
     props: {
@@ -32,9 +32,12 @@ app.component('folder-info', {
             if (confirm("Are you sure you want to delete folder '" + this.current_folder_name + "'?")) {
                 axios.
                     delete('/folders/' + this.current_folder_name).
-                    then(response => this.$emit('folder-deleted', this.current_folder_name)).
+                    then(response => this.folderDeleted()).
                     catch(error => alert('Failure deleting folder "' + this.current_folder_name + '": ' + error));
             }
+        },
+        folderDeleted() {
+            this.$emit('folder-deleted', this.current_folder_name);
         },
         updateFolderInfo(info) {
             this.folderInfo = info;
