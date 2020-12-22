@@ -1,6 +1,6 @@
 import cherrypy
 import cherrypy.lib
-from mimetypesdb import getMimeType
+from mimetypesdb import getMimeType, isImageFile, isVideoFile
 import json
 from photomanager import PhotoManager
 import os
@@ -34,7 +34,7 @@ class Image(object):
     @cherrypy.expose
     @cherrypy.tools.allow(methods=['GET'])
     def thumbnail(self, folder_name, image_name):
-        if image_name.lower().endswith('mov'):
+        if isVideoFile(image_name):
             image = self._getImage('../html', 'blank.png')
         else:
             image = self._getImage(folder_name, image_name)
@@ -53,15 +53,18 @@ class Folder(object):
         self._photoManager = photoManager
 
     @cherrypy.expose
-    @cherrypy.tools.allow(methods=['GET', 'POST'])
+    @cherrypy.tools.allow(methods=['GET', 'POST', 'DELETE'])
     def index(self, folder_name):
         if cherrypy.request.method == 'GET':
             return json.dumps(self._getFolder(folder_name).stats)
-        else: # POST
+        elif cherrypy.request.method == 'POST':
             folder = self._photoManager.addFolder(folder_name)
             if folder is None:
                 raise cherrypy.HTTPError(status=500, message=f'Error creating folder {folder_name}')
             return 'OK'
+        elif cherrypy.request.method == 'DELETE':
+            if not self._photoManager.deleteFolder(folder_name):
+                raise cherrypy.HTTPError(status=500, message=f'Error deleting folder {folder_name}')
 
     def _uploadFile(self, folder, fileToUpload):
         uploadFolder = self._photoManager.folder(folder)

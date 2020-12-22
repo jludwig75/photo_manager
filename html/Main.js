@@ -18,12 +18,15 @@ const app = Vue.createApp({
         onUploadComplete(folderName) {
             this.override_folder_selection = folderName;
             this.currentFolderName = folderName;
-            this.folder_list_updates++;
+            this.refreshFolderList();
         },
         showUploadDialog() {
             this.upload_dialog_mounts++;
             $('#upload-dialog').dialog({width: 800, height: 600});
             $('#userSelectedFolderName').focus();
+        },
+        refreshFolderList() {
+            this.folder_list_updates++;
         }
     },
     computed: {

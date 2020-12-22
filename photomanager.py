@@ -1,7 +1,9 @@
 from datetime import datetime
 from dumpexif import loadImageExifData
 from imgutils import generateThumbNail
+from mimetypesdb import isImageFile, isVideoFile
 import os
+import shutil
 
 class FileSystemEntity:
     def __init__(self, name, containerPath):
@@ -45,7 +47,7 @@ class Image(FileSystemEntity):
         if not os.path.exists(thumbnailPath):
             created = generateThumbNail(self.path, thumbnailDir)
             if not created or not os.path.exists(thumbnailPath):
-                if self.name.lower().endswith('mov'):
+                if isVideoFile(self.name):
                     return '/html/blank.png'
                 return self.path
         return thumbnailPath
@@ -89,6 +91,11 @@ class Folder(FileSytemContainer):
         with open(self.fullPath(imageName), 'wb') as imageFile:
             writer(imageFile)
         return Image(imageName, self.path)
+    def delete(self, forceDelete=False):
+        if not forceDelete and len(self.images) > 0:
+            return False
+        shutil.rmtree(self.path)
+        return True
     def _isImageFile(self, fileName):
         if not os.path.isfile(fileName):
             return False
@@ -113,6 +120,11 @@ class PhotoManager(FileSytemContainer):
             return None
         os.mkdir(self.fullPath(folderName))
         return Folder(folderName, self.path)
+    def deleteFolder(self, folderName, forceDelete=False):
+        if not os.path.isdir(self.fullPath(folderName)):
+            return False
+        return Folder(folderName, self.path).delete()
+
     def suggestNewFolderName(self):
         now = datetime.now()
         dateString = now.strftime('%Y-%m-%d')
