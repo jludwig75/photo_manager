@@ -56,6 +56,7 @@ app.component('image-list', {
                 image[key] = value
             }
             image['thumbNailPath'] = "'" + image.thumbNail + "'"
+            image['directLink'] = "/photos/" + this.current_folder_name + "/" + image.name;
         },
         updateImageData(imageData) {
             var index = imageData['userContext']

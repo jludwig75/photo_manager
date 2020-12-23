@@ -25,6 +25,11 @@ class Image(object):
     def index(self, folder_name, image_name, userContext=None):
         if cherrypy.request.method == 'GET':
             stats = self._getImage(folder_name, image_name).stats
+            stats['media_type'] = 'unknown'
+            if isImageFile(image_name):
+                stats['media_type'] = 'image'
+            elif isVideoFile(image_name):
+                stats['media_type'] = 'video'
             if userContext is not None:
                 stats['userContext'] = userContext
             return json.dumps(stats)

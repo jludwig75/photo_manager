@@ -1,7 +1,7 @@
 from datetime import datetime
 from dumpexif import loadImageExifData
 from imgutils import generateThumbNail
-from mimetypesdb import isImageFile, isVideoFile
+from mimetypesdb import isImageFile, isVideoFile, getFileMimeType
 import os
 import shutil
 import threading
@@ -63,6 +63,9 @@ class Image(FileSystemEntity):
                 'file_date': stat.st_ctime,
                 'size_bytes': stat.st_size
                }
+        mimeType = getFileMimeType(self.path)
+        if mimeType is not None:
+            stats['mime_type'] = mimeType
         exifData = loadImageExifData(self.path)
         if exifData is not None:
             stats.update(exifData)

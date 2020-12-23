@@ -15,6 +15,10 @@ if __name__ == "__main__":
         '/': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': os.path.abspath('./html')
+        },
+        '/photos': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': os.path.abspath('./photos')
         }
     }
     cherrypy.config.update({'server.socket_port': 8086})

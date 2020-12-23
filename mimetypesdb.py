@@ -45,10 +45,16 @@ def loadMimeTypes():
 def getMimeType(extension):
     extension = extension.lower()
     if extension in _image_mime_types_map:
-        _image_mime_types_map[extension]
+        return _image_mime_types_map[extension]
     if not extension in _video_mime_types_map:
         return None
     return _video_mime_types_map[extension]
+
+def getFileMimeType(fileName):
+    extension = _fileExtension(fileName)
+    if extension is None:
+        return False
+    return getMimeType(extension)
 
 def _fileExtension(fileName):
     path, ext = os.path.splitext(fileName)
