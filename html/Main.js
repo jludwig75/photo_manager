@@ -12,6 +12,9 @@ const app = Vue.createApp({
     },
     methods: {
         updateSelectedFolder(selectedFolderName) {
+            if (this.currentFolderName != selectedFolderName) {
+                this.currentImage = null;
+            }
             this.currentFolderName = selectedFolderName;
         },
         updateSelectedImage(selectedImage) {

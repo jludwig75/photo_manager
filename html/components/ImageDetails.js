@@ -7,7 +7,7 @@ app.component('image-details', {
         Properties of {{ current_image.name }}:
     </span>
 </div>
-<div class="image-detail" v-for="detail in getDetailsList(current_image)">
+<div v-if="current_image != null" class="image-detail" v-for="detail in getDetailsList(current_image)">
     <div class="image-detail-name">
         {{ detail.name }}
     </div>
