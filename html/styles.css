@@ -259,8 +259,8 @@ div.right {
 }
 
 .dialog-img {
-    max-width: 1024px;
-    max-height: 768px;
+    max-width: 800px;
+    max-height: 600px;
     width: auto;
     height: auto;
 }

@@ -10,7 +10,11 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>        
         <script>
             function showDialog() {
-                $( "#dialog" ).dialog({width: 1124, height: 868});
+                const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+                const dialogWidth = Math.floor((vw * 6) / 10);
+                const dialogHeight = vh - 20;
+                $( "#dialog" ).dialog({width: dialogWidth, height: dialogHeight});
             }
         </script>
     </head>
