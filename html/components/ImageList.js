@@ -11,12 +11,12 @@ app.component('image-list', {
           :class="{ selected: selectedImage != null && selectedImage.index == image.index }"
           :id="'image-' + image.index"
         >
-            <!-- <img class="image-list-item" :src="image.thumbNail" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)"> -->
+            <!-- <img class="image-list-item" :src="image.thumbnailPath" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)"> -->
             <!-- This div below replaces the image with a background so the user doesn't try to download the 
                  thumbnail image thinking they will get the full size image. I left the old code in, because
                  there might be a performance issue using the background image technique.
              -->
-            <div class="img-replacement" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" :style="{ backgroundImage: 'url(' + image.thumbNailPath + ')' }"></div>
+            <div class="img-replacement" v-on:click="onClickImage(image)" v-on:dblclick="onDoubleClickImage(image)" :style="{ backgroundImage: 'url(' + image.thumbnailPath + ')' }"></div>
         </li>
     </ul>
     <br/>

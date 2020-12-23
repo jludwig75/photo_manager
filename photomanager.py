@@ -62,8 +62,8 @@ class Image(FileSystemEntity):
                 'name': self.name,
                 'file_date': stat.st_ctime,
                 'size_bytes': stat.st_size,
-                'path': self.path,
-                'thumbnailPath': self.thumbnailPath
+                'path': '/' + self.path,
+                'thumbnailPath': '/' + self.thumbnailPath
                }
         mimeType = getFileMimeType(self.path)
         if mimeType is not None:
@@ -82,7 +82,7 @@ class Image(FileSystemEntity):
             created = generateThumbNail(self.path, thumbnailDir)
             if not created or not os.path.exists(thumbnailPath):
                 if isVideoFile(self.name):
-                    return '/html/blank.png'
+                    return 'video-icon.png'
                 return self.path
         return thumbnailPath
     @property

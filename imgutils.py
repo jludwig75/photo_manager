@@ -1,4 +1,5 @@
 import os
+from mimetypesdb import isImageFile
 from PIL import Image
 from PIL.ExifTags import TAGS
 import sys
@@ -46,30 +47,34 @@ def fixImageOrientation(image, orientation):
 
 def generateThumbNail(imagePath, destinationFolder):
     print(f'Generating thumbnail of {imagePath}...')
+    if not isImageFile(imagePath):
+        # TODO: Add video thumbnail support
+        return False
     try:
         image = Image.open(imagePath)
+        if not image:
+            return False
+
+        # Save off the original image orientation
+        orientation = getOrientation(image)
+
+        # Generate thumbnail image
+        image.thumbnail((MAX_WIDTH, MAX_HEIGHT))
+
+        # Fix thumbnail image orientation, because the
+        # orientation in the EXIF data is not in the thumbnail.
+        image = fixImageOrientation(image, orientation)
+
+        # Save the thumbnail
+        imageFileName = imagePath
+        if '/' in imageFileName:
+            imageFileName = imageFileName[imageFileName.rfind('/')+1:]
+        thumbnailPath = os.path.join(destinationFolder, imageFileName)
+        image.save(thumbnailPath, quality=90)
+        return True
     except:
         return False
-    if not image:
-        return False
 
-    # Save off the original image orientation
-    orientation = getOrientation(image)
-
-    # Generate thumbnail image
-    image.thumbnail((MAX_WIDTH, MAX_HEIGHT))
-
-    # Fix thumbnail image orientation, because the
-    # orientation in the EXIF data is not in the thumbnail.
-    image = fixImageOrientation(image, orientation)
-
-    # Save the thumbnail
-    imageFileName = imagePath
-    if '/' in imageFileName:
-        imageFileName = imageFileName[imageFileName.rfind('/')+1:]
-    thumbnailPath = os.path.join(destinationFolder, imageFileName)
-    image.save(thumbnailPath, quality=90)
-    return True
 
 
 if __name__ == "__main__":
