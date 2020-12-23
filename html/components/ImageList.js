@@ -75,6 +75,7 @@ app.component('image-list', {
         },
         getImages() {
             if (this.current_folder_name != null) {
+                console.log('Getting images for folder "' + this.current_folder_name + '"');
                 axios.
                     get('/folders/' + this.current_folder_name + '/images').
                     then(response => this.updateImageList(response.data)).

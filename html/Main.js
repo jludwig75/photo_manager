@@ -42,6 +42,7 @@ const app = Vue.createApp({
         onImageDeleted() {
             this.currentImage = null;
             this.refreshFolderInfo();
+            this.refreshCurrentFolder();
         },
         refreshFolderInfo() {
             this.folder_info_updates++;

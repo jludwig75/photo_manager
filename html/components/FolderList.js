@@ -58,15 +58,16 @@ app.component('folder-list', {
                     this.folderList.splice(i, 1);
                 }
             }
-            for (const folderName of this.folderList) {
-            }
             if (folderList.length > 0 && this.selectedFolderName == null && this.override_folder_selection == null) {
+                console.log('Selecting first folder in list');
                 this.onClickFolder(folderList[0]);
             }
             else if (this.override_folder_selection != null && this.inFolderList(this.override_folder_selection)) {
                 if (this.override_folder_selection == null) {
+                    console.log('Selecting first folder in list');
                     this.onClickFolder(folderList[0]);
                 } else {
+                    console.log('Selecting overriding selected folder');
                     this.selectedFolderName = this.override_folder_selection;
                 }
             }
@@ -98,6 +99,6 @@ app.component('folder-list', {
         this.refreshFolderList();
         this.timer = setInterval(() => {
             this.refreshFolderList();
-        }, 10000);
+        }, 60000);  // 1 minute
     }
 })
