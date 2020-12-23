@@ -30,13 +30,14 @@ app.component('image-list', {
     },
     data() {
         return {
+            fetchList: [],
             imageList: [],
             selectedImage: null
         }
     },
     methods: {
         addImageDetails(image, details) {
-        for (var key in details) {
+            for (var key in details) {
                 if (['name', 'userContext'].includes(key)) {
                     continue;
                 }
@@ -53,23 +54,24 @@ app.component('image-list', {
                 }
                 image[key] = value
             }
-            image['directLink'] = "/photos/" + this.current_folder_name + "/" + image.name;
+            this.imageList.push(image);
         },
         updateImageData(imageData) {
             var index = imageData['userContext']
-            this.addImageDetails(this.imageList[index], imageData)
+            this.addImageDetails(this.fetchList[index], imageData)
             if (index == 0) {
                 this.selectImage(this.imageList[index]);
             }
         },
         updateImageList(imageList) {
+            this.fetchList = [];
             var index = 0;
             for (const imageName of imageList) {
                 image = {'index': index,
                         'name': imageName,
                         'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
                         'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'};
-                this.imageList.push(image);
+                this.fetchList.push(image);
                 axios.
                     get('/folders/' + this.current_folder_name + '/images/' + imageName + '?userContext=' + index).
                     then(response => this.updateImageData(response.data)).
