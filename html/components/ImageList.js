@@ -30,7 +30,6 @@ app.component('image-list', {
     },
     data() {
         return {
-            fetchList: [],
             imageList: [],
             selectedImage: null
         }
@@ -38,7 +37,7 @@ app.component('image-list', {
     methods: {
         addImageDetails(image, details) {
             for (var key in details) {
-                if (['name', 'userContext'].includes(key)) {
+                if (['name', 'userContext', 'path', 'thumbnailPath'].includes(key)) {
                     continue;
                 }
                 if (key in image) {
@@ -54,26 +53,23 @@ app.component('image-list', {
                 }
                 image[key] = value
             }
-            this.imageList.push(image);
         },
         updateImageData(imageData) {
             var index = imageData['userContext']
-            this.addImageDetails(this.fetchList[index], imageData)
+            this.addImageDetails(this.imageList[index], imageData)
             if (index == 0) {
                 this.selectImage(this.imageList[index]);
             }
         },
         updateImageList(imageList) {
-            this.fetchList = [];
             var index = 0;
-            for (const imageName of imageList) {
-                image = {'index': index,
-                        'name': imageName};
-                this.fetchList.push(image);
+            for (const image of imageList) {
+                image['index'] = index;
+                this.imageList.push(image);
                 axios.
-                    get('/folders/' + this.current_folder_name + '/images/' + imageName + '?userContext=' + index).
+                    get('/folders/' + this.current_folder_name + '/images/' + image.name + '?userContext=' + index).
                     then(response => this.updateImageData(response.data)).
-                    catch(error => console.log('Failed to get image stats for image' + imageName + ': ' + error));
+                    catch(error => console.log('Failed to get image stats for image' + image.name + ': ' + error));
                 index += 1;
             }
         },

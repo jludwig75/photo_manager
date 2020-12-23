@@ -93,7 +93,16 @@ class Folder(object):
     @cherrypy.tools.allow(methods=['GET', 'POST'])
     def images(self, folder_name, **kwargs):
         if cherrypy.request.method == 'GET':
-            return json.dumps(self._getFolder(folder_name).images)
+            imageList = []
+            folder = self._getFolder(folder_name)
+            for imageName in folder.images:
+                image = folder.image(imageName)
+                imageList.append({
+                                    'name': imageName,
+                                    'path': urllib.parse.quote(image.path),
+                                    'thumbnailPath': urllib.parse.quote(image.thumbnailPath)
+                                 })
+            return json.dumps(imageList)
         else: # POST
             if not 'fileToUpload' in kwargs:
                 raise cherrypy.HTTPError(status=400, message='Missing argument "fileToUpload"')
