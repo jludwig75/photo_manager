@@ -46,7 +46,7 @@ app.component('image-details', {
                     continue;
                 }
                 compareKey = key.toLocaleLowerCase();
-                if (['name', 'index', 'link', 'thumbnail', 'thumbnailpath', 'format_mimetype', 'media_type'].includes(compareKey)) {
+                if (['name', 'index', 'link', 'thumbnail', 'thumbnailpath', 'format_mimetype', 'media_type', 'path'].includes(compareKey)) {
                     continue;
                 }
                 value = image[key];

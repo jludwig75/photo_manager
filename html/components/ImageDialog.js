@@ -4,7 +4,7 @@ app.component('image-dialog', {
 `
 <span v-if="current_image != null">
     <img v-if="current_image.media_type == 'image'" class="dialog-img" :src="current_image.path">
-    <video v-if="current_image.media_type == 'video'" width="640" height="480" controls>
+    <video v-if="current_image.media_type == 'video'" width="853" height="480" controls>
         <source :src="current_image.path" :type="current_image.mime_type">
         Your browser does not support the video tag.
     </video>
