@@ -68,9 +68,7 @@ app.component('image-list', {
             var index = 0;
             for (const imageName of imageList) {
                 image = {'index': index,
-                        'name': imageName,
-                        'link': '/folders/' + this.current_folder_name + '/images/' + imageName + '/content',
-                        'thumbNail': '/folders/' + this.current_folder_name + '/images/' + imageName + '/thumbnail'};
+                        'name': imageName};
                 this.fetchList.push(image);
                 axios.
                     get('/folders/' + this.current_folder_name + '/images/' + imageName + '?userContext=' + index).

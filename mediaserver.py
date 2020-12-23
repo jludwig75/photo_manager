@@ -4,6 +4,7 @@ from mimetypesdb import getMimeType, isImageFile, isVideoFile
 import json
 from photomanager import PhotoManager
 import os
+import urllib
 
 
 def _getImageMimeType(imageName):
@@ -32,6 +33,8 @@ class Image(object):
                 stats['media_type'] = 'video'
             if userContext is not None:
                 stats['userContext'] = userContext
+            stats['thumbnailPath'] = urllib.parse.quote(stats['thumbnailPath'])
+            stats['path'] = urllib.parse.quote(stats['path'])
             return json.dumps(stats)
         elif cherrypy.request.method == 'DELETE':
             image = self._getImage(folder_name, image_name)
