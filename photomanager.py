@@ -61,7 +61,9 @@ class Image(FileSystemEntity):
         stats = {
                 'name': self.name,
                 'file_date': stat.st_ctime,
-                'size_bytes': stat.st_size
+                'size_bytes': stat.st_size,
+                'path': self.path,
+                'thumbnailPath': self.thumbnailPath
                }
         mimeType = getFileMimeType(self.path)
         if mimeType is not None:
@@ -86,9 +88,6 @@ class Image(FileSystemEntity):
     @property
     def content(self):
         return open(self.path, 'rb')
-    @property
-    def thumbnail(self):
-        return open(self.thumbnailPath, 'rb')
     def delete(self):
         os.remove(self.path)
     @property

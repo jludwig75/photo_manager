@@ -36,8 +36,6 @@ app.component('image-list', {
     },
     methods: {
         addImageDetails(image, details) {
-        // image['file_date'] = new Date(1000 * details['create_time']);
-        // image['size_bytes'] = details['size_bytes'];
         for (var key in details) {
                 if (['name', 'userContext'].includes(key)) {
                     continue;
@@ -55,7 +53,6 @@ app.component('image-list', {
                 }
                 image[key] = value
             }
-            image['thumbNailPath'] = "'" + image.thumbNail + "'"
             image['directLink'] = "/photos/" + this.current_folder_name + "/" + image.name;
         },
         updateImageData(imageData) {
