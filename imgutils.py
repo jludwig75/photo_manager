@@ -49,10 +49,12 @@ def generateThumbNail(imagePath, destinationFolder):
     print(f'Generating thumbnail of {imagePath}...')
     if not isImageFile(imagePath):
         # TODO: Add video thumbnail support
+        print(f'Not creating thumbnail of {imagePath}. It is not a known image file format')
         return False
     try:
         image = Image.open(imagePath)
         if not image:
+            print(f'Unable to open image {imagePath} to create thumbnail')
             return False
 
         # Save off the original image orientation
@@ -72,7 +74,8 @@ def generateThumbNail(imagePath, destinationFolder):
         thumbnailPath = os.path.join(destinationFolder, imageFileName)
         image.save(thumbnailPath, quality=90)
         return True
-    except:
+    except Exception as e:
+        print(f'Exception creating thumbnail for image {imagePath}: {e}')
         return False
 
 
