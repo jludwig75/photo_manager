@@ -1,0 +1,15 @@
+[Unit]
+Description=Photo Manager Web Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=jludwig
+WorkingDirectory=/home/jludwig/code/photo_manager
+ExecStart=/usr/bin/env python3 /home/jludwig/code/photo_manager/photo-server.py
+
+[Install]
+WantedBy=multi-user.target
